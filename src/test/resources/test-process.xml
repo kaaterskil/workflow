@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process processType="PRIVATE" isExecutable="true" name="Hello World">
+	<flowElements>
+		<startEvent class="StartEvent" id="start_1" name="startProcess" />
+		<sequenceFlow class="SequenceFlow" id="flow_1" sourceRef="start_1"
+			targetRef="task_1" />
+		<serviceTask class="ServiceTask" id="task_1" name="Do something">
+			<documentation text="This is a task to do something" />
+			<documentation text="And this is another note" />
+		</serviceTask>
+		<task class="Task" id="foo_task" name="Thi is a foo task" />
+		<sequenceFlow class="SequenceFlow" id="flow_2" name="sequence flow foo"
+			sourceRef="task_1" targetRef="task_2" isImmediate="true" />
+		<serviceTask class="ServiceTask" id="task_2" name="Do something else" />
+		<sequenceFlow class="SequenceFlow" id="flow_3" sourceRef="task_2"
+			targetRef="task_3" />
+		<serviceTask class="ServiceTask" id="task_3" name="Do a third thing" />
+		<sequenceFlow class="SequenceFlow" id="flow_4" sourceRef="task_3"
+			targetRef="end_1" />
+		<endEvent class="EndEvent" id="end_1" name="EndProcess" />
+	</flowElements>
+	<properties>
+		<property id="prop_1" name="Property 1" />
+		<property id="prop_2" name="Property 2" />
+		<property id="prop_3" name="Property 3" />
+	</properties>
+</process>

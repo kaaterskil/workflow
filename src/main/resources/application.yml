@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: Workflow
+  data:
+    jpa:
+      repositories:
+        enabled: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/devapi
+    username: postgres
+    password: admin
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      naming-strategy:
+        org.hibernate.cfg.ImprovedNamingStrategy
+  profiles:
+    active: development
+    
+logging:
+  path: ../logs
+  level:
+    org.springframework: INFO
+    com.kaaterskil.workflow: DEBUG
