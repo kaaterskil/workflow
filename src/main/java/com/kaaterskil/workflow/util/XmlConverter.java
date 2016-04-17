@@ -25,11 +25,7 @@ public class XmlConverter {
 
     private static Jaxb2Marshaller getMarshaller() {
         final Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-        marshaller.setPackagesToScan("com.kaaterskil.workflow.bpm.activities",
-                "com.kaaterskil.workflow.bpm.artifacts", "com.kaaterskil.workflow.bpm.common",
-                "com.kaaterskil.workflow.bpm.data", "com.kaaterskil.workflow.bpm.events",
-                "com.kaaterskil.workflow.bpm.foundation", "com.kaaterskil.workflow.bpm.gateways",
-                "com.kaaterskil.workflow.bpm.process", "com.kaaterskil.workflow.bpm.service");
+        marshaller.setPackagesToScan("com.kaaterskil.workflow.bpm");
 
         final Map<String, Object> propertyMap = new HashMap<>();
         propertyMap.put("jaxb.formatted.output", true);
@@ -67,7 +63,7 @@ public class XmlConverter {
             is = XmlConverter.class.getResourceAsStream(fileName);
             return unmarshaller.unmarshal(new StreamSource(is));
         } finally {
-            if(is != null) {
+            if (is != null) {
                 is.close();
             }
         }
