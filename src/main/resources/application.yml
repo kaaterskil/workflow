@@ -20,7 +20,7 @@ spring:
       naming-strategy:
         org.hibernate.cfg.ImprovedNamingStrategy
   profiles:
-    active: development
+    active: workflow-development
     
 logging:
   path: ../logs

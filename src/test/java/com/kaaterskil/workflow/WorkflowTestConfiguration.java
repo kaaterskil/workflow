@@ -7,13 +7,10 @@ import org.springframework.context.annotation.Profile;
 
 import com.kaaterskil.workflow.engine.util.ApplicationContextUtil;
 
-@Profile("workflow-development")
+@Profile("workflow-test")
 @Configuration
-@ComponentScan(basePackages = {
-        "com.kaaterskil.workflow.engine", "com.kaaterskil.workflow.engine.delegate.event",
-        "com.kaaterskil.workflow.engine.mapper", "com.kaaterskil.workflow.engine.interceptor",
-        "com.kaaterskil.workflow.engine.service.impl", "com.kaaterskil.workflow.impl.condition" })
-public class WorkflowConfiguration {
+@ComponentScan
+public class WorkflowTestConfiguration {
 
     @Bean
     public ApplicationContextUtil applicationContextUtil() {
