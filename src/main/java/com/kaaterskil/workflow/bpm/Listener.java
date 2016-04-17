@@ -12,33 +12,54 @@ import com.kaaterskil.workflow.bpm.foundation.BaseElement;
 @XmlAccessorType(XmlAccessType.NONE)
 public class Listener extends BaseElement {
 
-    @XmlAttribute
-    private String eventRef;
+    /**
+     * Comma-delimited string of applicable WorkflowEventType values.
+     */
+    @XmlAttribute(name = "events", required = false)
+    private String eventRefs;
 
     @XmlAttribute
-    private String implementationType;
+    private ImplementationType implementationType = ImplementationType.CLASS;
 
+    /**
+     * The listener bean className
+     */
     @XmlAttribute
     private String implementation;
+
+    /**
+     * The type of entity for which to trigger the event, i.e. token, job, process-definition, etc.
+     */
+    @XmlAttribute
+    private String entityType;
 
     @XmlTransient
     private Object instance;
 
+    /*---------- Methods ----------*/
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Listener [eventRefs=%s, implementationType=%s, implementation=%s, entityType=%s, instance=%s]",
+                eventRefs, implementationType, implementation, entityType, instance);
+    }
+
     /*---------- Getter/Setters ----------*/
 
-    public String getEventRef() {
-        return eventRef;
+    public String getEventRefs() {
+        return eventRefs;
     }
 
-    public void setEventRef(String eventRef) {
-        this.eventRef = eventRef;
+    public void setEventRefs(String eventRefs) {
+        this.eventRefs = eventRefs;
     }
 
-    public String getImplementationType() {
+    public ImplementationType getImplementationType() {
         return implementationType;
     }
 
-    public void setImplementationType(String implementationType) {
+    public void setImplementationType(ImplementationType implementationType) {
         this.implementationType = implementationType;
     }
 
@@ -48,6 +69,14 @@ public class Listener extends BaseElement {
 
     public void setImplementation(String implementation) {
         this.implementation = implementation;
+    }
+
+    public String getEntityType() {
+        return entityType;
+    }
+
+    public void setEntityType(String entityType) {
+        this.entityType = entityType;
     }
 
     public Object getInstance() {

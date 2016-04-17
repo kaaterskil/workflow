@@ -7,10 +7,13 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyAttribute;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.namespace.QName;
 
 /**
  * BaseElement is the abstract super class for most BPMN elements. It provides the attributes id and
@@ -43,23 +46,18 @@ public abstract class BaseElement {
      * mechanisms for supporting anyAttribute and any element already satisfy this requirement. See
      * page 57 for additional information on extensibility.
      */
-    protected final Map<String, ExtensionAttribute> extensionElements = new HashMap<>();
+    @XmlElementWrapper(name = "extensionElements", required = false)
+    @XmlAnyElement(lax = true)
+    protected List<Object> extensionElements = new ArrayList<>();
 
-    /*---------- Methods ----------*/
-
-    public String getExtensionElementValue(String name) {
-        final ExtensionAttribute attribute = extensionElements.get(name);
-        if (attribute != null) {
-            return attribute.getValue();
-        }
-        return null;
-    }
-
-    public void addExtensionElement(ExtensionAttribute attribute) {
-        if (attribute != null && attribute.getName() != null) {
-            extensionElements.put(attribute.getName(), attribute);
-        }
-    }
+    /**
+     * This attribute is used to provide values for extended attributes and model associations. This
+     * association is not applicable when the XML schema interchange is used, since the XSD
+     * mechanisms for supporting anyAttribute and any element already satisfy this requirement. See
+     * page 57 for additional information on extensibility.
+     */
+    @XmlAnyAttribute
+    protected Map<QName, Object> extensionAttributes = new HashMap<>();
 
     /*---------- Getter/Setters ----------*/
 
@@ -75,21 +73,23 @@ public abstract class BaseElement {
         return documentation;
     }
 
-    public void setDocumentation(ArrayList<Documentation> documentation) {
+    public void setDocumentation(List<Documentation> documentation) {
         this.documentation = documentation;
     }
 
-    public Map<String, ExtensionAttribute> getExtensionElements() {
+    public List<Object> getExtensionElements() {
         return extensionElements;
     }
 
-    @XmlElementWrapper(name = "extensionElements")
-    @XmlElement(name = "extensionAttribute", type = ExtensionAttribute.class)
-    public void setExtensionElements(ArrayList<ExtensionAttribute> extensionElements) {
-        if (extensionElements != null && !extensionElements.isEmpty()) {
-            for (final ExtensionAttribute each : extensionElements) {
-                addExtensionElement(each);
-            }
-        }
+    public void setExtensionElements(List<Object> extensionElements) {
+        this.extensionElements = extensionElements;
+    }
+
+    public Map<QName, Object> getExtensionAttributes() {
+        return extensionAttributes;
+    }
+
+    public void setExtensionAttributes(Map<QName, Object> extensionAttributes) {
+        this.extensionAttributes = extensionAttributes;
     }
 }

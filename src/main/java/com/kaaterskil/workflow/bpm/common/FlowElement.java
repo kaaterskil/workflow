@@ -3,11 +3,8 @@ package com.kaaterskil.workflow.bpm.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import com.kaaterskil.workflow.bpm.HasTokenListeners;
 import com.kaaterskil.workflow.bpm.Listener;
@@ -22,8 +19,6 @@ import com.kaaterskil.workflow.bpm.foundation.BaseElement;
  *
  * @author bcaple
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.NONE)
 public abstract class FlowElement extends BaseElement implements HasTokenListeners {
 
     /**
@@ -38,7 +33,7 @@ public abstract class FlowElement extends BaseElement implements HasTokenListene
     @XmlElement(name = "categoryValueRef", required = false)
     protected List<String> categoryValueRef = new ArrayList<>();
 
-    @XmlElement(name = "listener", type = Listener.class, required = false)
+    @XmlElement(name = "tokenListener", type = Listener.class, required = false)
     protected List<Listener> tokenListeners = new ArrayList<>();
 
     @XmlElement(name = "subProcess", type = SubProcess.class, required = false)

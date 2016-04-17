@@ -105,7 +105,7 @@ public class Process extends CallableElement implements FlowElementsContainer, H
             @XmlElement(name = "category", type = CategoryValue.class) })
     private List<Artifact> artifacts = new ArrayList<>();
 
-    @XmlElement(name = "listener", type = Listener.class, required = false)
+    @XmlElement(name = "tokenListener", type = Listener.class, required = false)
     protected List<Listener> tokenListeners = new ArrayList<>();
 
     @XmlTransient

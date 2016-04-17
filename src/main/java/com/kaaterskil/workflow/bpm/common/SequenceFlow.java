@@ -86,9 +86,10 @@ public class SequenceFlow extends FlowElement {
     @Override
     public String toString() {
         return String.format(
-                "SequenceFlow [sourceRef=%s, targetRef=%s, conditionExpression=%s, isImmediate=%s, name=%s, categoryValueRef=%s, id=%s, documentation=%s, extensionElements=%s]",
-                sourceRef, targetRef, conditionExpression, isImmediate, name, categoryValueRef, id,
-                documentation, extensionElements);
+                "SequenceFlow [sourceRef=%s, targetRef=%s, isImmediate=%s, conditionExpression=%s, name=%s, categoryValueRef=%s, tokenListeners=%s, subProcess=%s, id=%s, documentation=%s, extensionElements=%s, extensionAttributes=%s]",
+                sourceRef, targetRef, isImmediate, conditionExpression, name, categoryValueRef,
+                tokenListeners, subProcess, id, documentation, extensionElements,
+                extensionAttributes);
     }
 
     /*---------- Getter/Setters ----------*/
