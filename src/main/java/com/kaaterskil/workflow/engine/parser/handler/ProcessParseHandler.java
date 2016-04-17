@@ -15,7 +15,7 @@ import com.kaaterskil.workflow.engine.context.Context;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventListener;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventType;
 import com.kaaterskil.workflow.engine.parser.BpmParser;
-import com.kaaterskil.workflow.engine.parser.ListenerFactory;
+import com.kaaterskil.workflow.engine.parser.factory.ListenerFactory;
 import com.kaaterskil.workflow.engine.persistence.entity.ProcessDefinitionEntity;
 
 public class ProcessParseHandler extends AbstractParseHandler<Process> {
@@ -42,7 +42,7 @@ public class ProcessParseHandler extends AbstractParseHandler<Process> {
     }
 
     private ProcessDefinitionEntity createProcessDefinition(BpmParser parser, Process process) {
-        log.debug("Creating process Definition");
+        log.debug("Creating process definition");
         final ProcessDefinitionEntity entity = Context.getCommandContext()
                 .getProcessDefinitionService().create();
         entity.setKey(process.getId());

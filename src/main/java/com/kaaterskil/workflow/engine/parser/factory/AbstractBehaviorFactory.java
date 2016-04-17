@@ -1,4 +1,4 @@
-package com.kaaterskil.workflow.engine.parser;
+package com.kaaterskil.workflow.engine.parser.factory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.namespace.QName;
+
+import com.kaaterskil.workflow.engine.parser.FieldDeclaration;
 
 public abstract class AbstractBehaviorFactory {
 

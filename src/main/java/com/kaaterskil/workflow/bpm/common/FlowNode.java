@@ -2,8 +2,6 @@ package com.kaaterskil.workflow.bpm.common;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -38,10 +36,10 @@ public abstract class FlowNode extends FlowElement {
      */
     @XmlElementWrapper(name = "outgoing")
     @XmlElement(name = "sequenceFlow", type = SequenceFlow.class, required = false)
-    protected Set<SequenceFlow> outgoing = new TreeSet<>();
+    protected List<SequenceFlow> outgoing = new ArrayList<>();
 
     @XmlAttribute
-    private boolean isAsynchronous;
+    protected boolean isAsynchronous;
 
     @XmlAttribute
     protected String behavior;
@@ -65,11 +63,11 @@ public abstract class FlowNode extends FlowElement {
         this.incoming = incoming;
     }
 
-    public Set<SequenceFlow> getOutgoing() {
+    public List<SequenceFlow> getOutgoing() {
         return outgoing;
     }
 
-    public void setOutgoing(Set<SequenceFlow> outgoing) {
+    public void setOutgoing(List<SequenceFlow> outgoing) {
         this.outgoing = outgoing;
     }
 

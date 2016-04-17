@@ -1,4 +1,4 @@
-package com.kaaterskil.workflow.engine.parser;
+package com.kaaterskil.workflow.engine.parser.factory;
 
 import com.kaaterskil.workflow.bpm.Listener;
 import com.kaaterskil.workflow.engine.bpm.ClassDelegateFactory;

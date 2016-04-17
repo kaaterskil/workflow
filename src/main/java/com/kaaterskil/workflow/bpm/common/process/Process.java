@@ -108,8 +108,18 @@ public class Process extends CallableElement implements FlowElementsContainer, H
     @XmlElement(name = "tokenListener", type = Listener.class, required = false)
     protected List<Listener> tokenListeners = new ArrayList<>();
 
+    /*---------- Instance properties ----------*/
+
     @XmlTransient
     private FlowElement initialFlowElement;
+
+    public FlowElement getInitialFlowElement() {
+        return initialFlowElement;
+    }
+
+    public void setInitialFlowElement(FlowElement initialFlowElement) {
+        this.initialFlowElement = initialFlowElement;
+    }
 
     /*---------- Methods ----------*/
 
@@ -273,13 +283,5 @@ public class Process extends CallableElement implements FlowElementsContainer, H
     @Override
     public void setTokenListeners(List<Listener> tokenListeners) {
         this.tokenListeners = tokenListeners;
-    }
-
-    public FlowElement getInitialFlowElement() {
-        return initialFlowElement;
-    }
-
-    public void setInitialFlowElement(FlowElement initialFlowElement) {
-        this.initialFlowElement = initialFlowElement;
     }
 }

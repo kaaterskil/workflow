@@ -35,11 +35,13 @@ public class ServiceTask extends Task {
     @Override
     public String toString() {
         return String.format(
-                "ServiceTask [implementation=%s, operationRef=%s, isForCompensation=%s, loopCharacteristics=%s, defaultSequenceFlow=%s, ioSpecification=%s, properties=%s, dataInputAssociations=%s, dataOutputAssociations=%s, startQuantity=%s, completionQuantity=%s, state=%s, incoming=%s, outgoing=%s, name=%s, categoryValueRef=%s, id=%s, documentation=%s, extensionElements=%s]",
+                "ServiceTask [implementation=%s, operationRef=%s, isForCompensation=%s, loopCharacteristics=%s, defaultSequenceFlow=%s, ioSpecification=%s, properties=%s, boundaryEventRefs=%s, dataInputAssociations=%s, dataOutputAssociations=%s, startQuantity=%s, completionQuantity=%s, state=%s, incoming=%s, outgoing=%s, isAsynchronous=%s, behavior=%s, name=%s, categoryValueRef=%s, tokenListeners=%s, subProcess=%s, id=%s, documentation=%s, extensionElements=%s, extensionAttributes=%s, getTokenListeners()=%s]",
                 implementation, operationRef, isForCompensation, loopCharacteristics,
-                defaultSequenceFlow, ioSpecification, properties, dataInputAssociations,
-                dataOutputAssociations, startQuantity, completionQuantity, state, incoming,
-                outgoing, name, categoryValueRef, id, documentation, extensionElements);
+                defaultSequenceFlow, ioSpecification, properties, boundaryEventRefs,
+                dataInputAssociations, dataOutputAssociations, startQuantity, completionQuantity,
+                state, incoming, outgoing, isAsynchronous, behavior, name, categoryValueRef,
+                tokenListeners, subProcess, id, documentation, extensionElements,
+                extensionAttributes, getTokenListeners());
     }
 
     /*---------- Getter/Setters ----------*/

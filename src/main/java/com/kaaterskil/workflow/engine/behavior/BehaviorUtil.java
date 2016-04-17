@@ -1,7 +1,5 @@
 package com.kaaterskil.workflow.engine.behavior;
 
-import org.springframework.beans.BeansException;
-
 import com.kaaterskil.workflow.bpm.common.FlowNode;
 import com.kaaterskil.workflow.engine.delegate.ActivityBehavior;
 import com.kaaterskil.workflow.engine.exception.WorkflowException;
@@ -16,10 +14,10 @@ public class BehaviorUtil {
         final String behaviorBeanName = flowNode.getBehavior();
 
         try {
-            final ActivityBehavior behavior = (ActivityBehavior) ApplicationContextUtil
-                    .getBean(behaviorBeanName);
+            final ActivityBehavior behavior = ApplicationContextUtil.instantiate(behaviorBeanName,
+                    ActivityBehavior.class);
             return behavior;
-        } catch (final BeansException e) {
+        } catch (final Exception e) {
             throw new WorkflowException("Could not instantiate bean with name " + behaviorBeanName);
         }
     }
