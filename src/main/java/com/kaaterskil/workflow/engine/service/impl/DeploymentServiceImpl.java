@@ -15,6 +15,7 @@ import com.kaaterskil.workflow.engine.persistence.entity.ProcessDefinitionEntity
 import com.kaaterskil.workflow.engine.persistence.repository.DeploymentRepository;
 import com.kaaterskil.workflow.engine.persistence.repository.ProcessDefinitionRepository;
 import com.kaaterskil.workflow.engine.service.DeploymentService;
+import com.kaaterskil.workflow.util.ValidationUtils;
 
 @Component
 public class DeploymentServiceImpl implements DeploymentService {
@@ -64,6 +65,10 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public ProcessDefinitionEntity findDeployedProcessDefinitionByKey(String processDefinitionKey) {
+        if (ValidationUtils.isEmptyOrWhitespace(processDefinitionKey)) {
+            throw new IllegalArgumentException("process definition key cannot be null");
+        }
+
         ProcessDefinitionEntity processDefinition = processDefinitionRepository
                 .findByKey(processDefinitionKey);
         if (processDefinition == null) {

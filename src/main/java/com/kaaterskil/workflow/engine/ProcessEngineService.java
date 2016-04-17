@@ -33,11 +33,13 @@ import com.kaaterskil.workflow.engine.interceptor.CommandInterceptor;
 import com.kaaterskil.workflow.engine.interceptor.CommandInvoker;
 import com.kaaterskil.workflow.engine.interceptor.LogInterceptor;
 import com.kaaterskil.workflow.engine.parser.BpmParseHelper;
-import com.kaaterskil.workflow.engine.parser.ListenerFactory;
-import com.kaaterskil.workflow.engine.parser.ListenerFactoryImpl;
+import com.kaaterskil.workflow.engine.parser.factory.ActivityBehaviorFactory;
+import com.kaaterskil.workflow.engine.parser.factory.ListenerFactory;
+import com.kaaterskil.workflow.engine.parser.factory.ListenerFactoryImpl;
 import com.kaaterskil.workflow.engine.parser.handler.ParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.ProcessParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.SequenceFlowParseHandler;
+import com.kaaterskil.workflow.engine.parser.handler.StartEventParseHandler;
 import com.kaaterskil.workflow.engine.persistence.entity.EventSubscriptionType;
 import com.kaaterskil.workflow.engine.service.DeploymentService;
 import com.kaaterskil.workflow.engine.service.TokenService;
@@ -51,8 +53,10 @@ public class ProcessEngineService {
 
     @Autowired
     private RuntimeService runtimeService;
+
     @Autowired
     private RepositoryService repositoryService;
+
     @Autowired
     private DeploymentService deploymentService;
 
@@ -75,6 +79,7 @@ public class ProcessEngineService {
     protected long asyncFailedJobWaitTimeMillis = 10 * 1000;
 
     private ListenerFactory listenerFactory;
+    private ActivityBehaviorFactory activityBehaviorFactory;
     private DelegateInterceptor delegateInterceptor;
 
     private Map<EventSubscriptionType, EventHandler> eventHandlers;
@@ -98,6 +103,7 @@ public class ProcessEngineService {
         initCommandExecutors();
         initServices();
         initListenerFactory();
+        initActivityBehaviorFactory();
         initBpmParseHelper();
         initDeployers();
         initJobHandlers();
@@ -170,6 +176,12 @@ public class ProcessEngineService {
         }
     }
 
+    private void initActivityBehaviorFactory() {
+        if(activityBehaviorFactory == null) {
+            activityBehaviorFactory = new ActivityBehaviorFactory();
+        }
+    }
+
     private void initBpmParseHelper() {
         if (bpmParseHelper == null) {
             bpmParseHelper = new BpmParseHelper();
@@ -177,6 +189,7 @@ public class ProcessEngineService {
             final List<ParseHandler> defaultHandlers = new ArrayList<>();
             defaultHandlers.add(new ProcessParseHandler());
             defaultHandlers.add(new SequenceFlowParseHandler());
+            defaultHandlers.add(new StartEventParseHandler());
 
             bpmParseHelper.addHandlers(defaultHandlers);
         }
@@ -365,6 +378,14 @@ public class ProcessEngineService {
 
     public void setListenerFactory(ListenerFactory listenerFactory) {
         this.listenerFactory = listenerFactory;
+    }
+
+    public ActivityBehaviorFactory getActivityBehaviorFactory() {
+        return activityBehaviorFactory;
+    }
+
+    public void setActivityBehaviorFactory(ActivityBehaviorFactory activityBehaviorFactory) {
+        this.activityBehaviorFactory = activityBehaviorFactory;
     }
 
     public Map<String, JobHandler> getJobHandlers() {

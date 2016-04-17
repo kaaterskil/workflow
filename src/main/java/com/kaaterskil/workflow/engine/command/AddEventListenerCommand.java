@@ -7,15 +7,15 @@ import com.kaaterskil.workflow.engine.interceptor.CommandContext;
 public class AddEventListenerCommand implements Command<Void> {
 
     private final WorkflowEventListener listener;
-    private WorkflowEventType type;
+    private WorkflowEventType[] types;
 
     public AddEventListenerCommand(WorkflowEventListener listener) {
         this.listener = listener;
     }
 
-    public AddEventListenerCommand(WorkflowEventListener listener, WorkflowEventType type) {
+    public AddEventListenerCommand(WorkflowEventListener listener, WorkflowEventType ... types) {
         this.listener = listener;
-        this.type = type;
+        this.types = types;
     }
 
     @Override
@@ -24,9 +24,9 @@ public class AddEventListenerCommand implements Command<Void> {
             throw new IllegalArgumentException("listener cannot be null");
         }
 
-        if (type != null) {
+        if (types != null) {
             commandContext.getProcessEngineService().getEventDispatcher()
-                    .addTypedEventListener(listener, type);
+                    .addEventListener(listener, types);
         } else {
             commandContext.getProcessEngineService().getEventDispatcher()
                     .addEventListener(listener);

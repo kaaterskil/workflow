@@ -78,4 +78,12 @@ public class WorkflowEventUtil {
             list.add(listener);
         }
     }
+
+    public List<WorkflowEventListener> getListeners() {
+        return listeners;
+    }
+
+    public Map<WorkflowEventType, List<WorkflowEventListener>> getTypedListeners() {
+        return typedListeners;
+    }
 }

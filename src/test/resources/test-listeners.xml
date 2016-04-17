@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<process processType="PRIVATE" isExecutable="true" name="Hello World">
+<process processType="PRIVATE" isExecutable="true" id="TestEvent"
+	name="TestEvent">
 	<flowElements>
 		<startEvent id="start_1" name="startProcess" />
-		<sequenceFlow id="flow_1" sourceRef="start_1" targetRef="task_1">
-			<tokenListener
-				implementation="com.kaaterskil.workflow.engine.delegate.event.MockTokenListener"
-				events="ACTIVITY_STARTED" />
-		</sequenceFlow>
+		<sequenceFlow id="flow_1" sourceRef="start_1" targetRef="task_1" />
 		<serviceTask id="task_1" name="Do something">
 			<documentation text="This is a task to do something" />
 			<documentation text="And this is another note" />
+			<tokenListener
+				implementation="com.kaaterskil.workflow.engine.delegate.event.MockTokenListener"
+				events="end" />
 		</serviceTask>
 		<sequenceFlow id="flow_2" sourceRef="task_1" targetRef="end_1" />
 		<endEvent id="end_1" name="EndProcess" />
 	</flowElements>
 	<extensionElements>
-		<listener class="com.kaaterskil.workflow.engine.delegate.event.MockEventListener"></listener>
+		<listener
+			implementation="com.kaaterskil.workflow.engine.delegate.event.MockEventListener"
+			events="ENTITY_CREATED" />
 	</extensionElements>
 	<properties>
 		<property id="prop_1" name="Property 1" />

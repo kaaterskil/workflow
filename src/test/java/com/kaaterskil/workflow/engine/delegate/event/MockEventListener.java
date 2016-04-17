@@ -5,19 +5,29 @@ import org.springframework.stereotype.Component;
 @Component
 public class MockEventListener implements WorkflowEventListener {
 
+    private String message;
+
     @Override
     public void onEvent(WorkflowEvent event) {
+        final StringBuffer sb = new StringBuffer("Event listener called: ");
+
         switch (event.getType()) {
-        case JOB_EXECUTION_SUCCESS:
-            System.out.println("Job succeeded");
+        case ACTIVITY_STARTED:
+            sb.append("Activity started");
             break;
-        case JOB_EXECUTION_FAILURE:
-            System.out.println("Job failed");
+        case ENTITY_CREATED:
+            sb.append("Entity created");
+            break;
+        case ENTITY_INITIALIZED:
+            sb.append("Entity initialized");
             break;
         default:
-            System.out.println("Some other outcome: " + event.getType());
+            sb.append("Some other outcome: " + event.getType());
             break;
         }
+
+        message = sb.toString();
+        System.out.println(message);
     }
 
     @Override
@@ -27,7 +37,15 @@ public class MockEventListener implements WorkflowEventListener {
 
     @Override
     public String toString() {
-        return String.format("MockEventListener []");
+        return String.format("MockEventListener [message=%s]", message);
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
 }

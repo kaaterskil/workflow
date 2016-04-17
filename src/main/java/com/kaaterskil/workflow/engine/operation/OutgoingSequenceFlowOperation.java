@@ -98,7 +98,10 @@ public class OutgoingSequenceFlowOperation extends AbstractOperation {
         }
     }
 
-    protected void leaveFlowNode(FlowNode flowNode) {
+    private void leaveFlowNode(FlowNode flowNode) {
+        log.debug("Leaving flow node {} with id {} by following its {} outgoing sequence flow",
+                flowNode.getClass(), flowNode.getId(), flowNode.getOutgoing().size());
+
         // Get the default sequence flow
         String defaultSequenceFlowId = null;
         if (flowNode instanceof Activity) {
@@ -136,7 +139,7 @@ public class OutgoingSequenceFlowOperation extends AbstractOperation {
         // Still no outgoing flow? End the token.
         if (outgoingSequenceFlow.isEmpty()) {
             if (flowNode.getOutgoing().isEmpty()) {
-                log.debug("no outgoing sequence flow for flow node {}", flowNode.getId());
+                log.debug("No outgoing sequence flow for flow node {}", flowNode.getId());
 
                 if (flowNode.getSubProcess() != null
                         && flowNode.getSubProcess() instanceof EventSubProcess) {

@@ -2,6 +2,9 @@ package com.kaaterskil.workflow.engine.operation;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.kaaterskil.workflow.bpm.HasTokenListeners;
 import com.kaaterskil.workflow.bpm.ImplementationType;
 import com.kaaterskil.workflow.bpm.Listener;
@@ -10,11 +13,12 @@ import com.kaaterskil.workflow.bpm.common.process.Process;
 import com.kaaterskil.workflow.engine.context.Context;
 import com.kaaterskil.workflow.engine.delegate.TokenListener;
 import com.kaaterskil.workflow.engine.interceptor.CommandContext;
-import com.kaaterskil.workflow.engine.parser.ListenerFactory;
+import com.kaaterskil.workflow.engine.parser.factory.ListenerFactory;
 import com.kaaterskil.workflow.engine.persistence.entity.Token;
 import com.kaaterskil.workflow.engine.util.ProcessDefinitionUtil;
 
 public abstract class AbstractOperation implements Runnable {
+    private static final Logger log = LoggerFactory.getLogger(AbstractOperation.class);
 
     protected CommandContext commandContext;
     protected Workflow workflow;
@@ -41,28 +45,32 @@ public abstract class AbstractOperation implements Runnable {
         executeTokenListeners(element, null, eventType);
     }
 
-    protected void executeTokenListeners(HasTokenListeners element,
-            Token tokenToUseForListener, String eventType) {
+    protected void executeTokenListeners(HasTokenListeners element, Token tokenToUseForListener,
+            String eventType) {
+        log.debug("Executing token listeners for " + eventType);
         final List<Listener> listeners = element.getTokenListeners();
-        final ListenerFactory listenerFactory = Context.getProcessEngineService().getListenerFactory();
+        final ListenerFactory listenerFactory = Context.getProcessEngineService()
+                .getListenerFactory();
 
         if (listeners != null) {
             for (final Listener listener : listeners) {
-                if(eventType.equals(listener.getEventRefs())) {
+                if (eventType.equals(listener.getEventRefs())) {
                     TokenListener tokenListener = null;
 
-                    if(listener.getImplementationType().equals(ImplementationType.CLASS)) {
+                    if (listener.getImplementationType().equals(ImplementationType.CLASS)) {
                         tokenListener = listenerFactory.createClassDelegateTokenListener(listener);
-                    } else if(listener.getImplementationType().equals(ImplementationType.INSTANCE)) {
+                        listener.setInstance(tokenListener);
+                    } else
+                        if (listener.getImplementationType().equals(ImplementationType.INSTANCE)) {
                         tokenListener = (TokenListener) listener.getInstance();
                     }
 
                     Token tokenToUse = token;
-                    if(tokenToUseForListener != null) {
+                    if (tokenToUseForListener != null) {
                         tokenToUse = tokenToUseForListener;
                     }
 
-                    if(tokenListener != null) {
+                    if (tokenListener != null) {
                         tokenToUse.setEventName(eventType);
                         tokenListener.notify(tokenToUse);
                         tokenToUse.setEventName(null);

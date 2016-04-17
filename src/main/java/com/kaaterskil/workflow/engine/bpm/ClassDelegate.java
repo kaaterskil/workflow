@@ -85,7 +85,7 @@ public class ClassDelegate extends BaseActivityBehavior
                 .handleInvocation(new TokenListenerInvocation(tokenListenerInstance, token));
     }
 
-    private TokenListener getTokenListenerInstance() {
+    public TokenListener getTokenListenerInstance() {
         final Object delegateInstance = instantiateDelegate(className, fieldDeclarations);
         if (delegateInstance instanceof TokenListener) {
             return (TokenListener) delegateInstance;

@@ -7,6 +7,11 @@ import com.kaaterskil.workflow.engine.service.DeploymentService;
 
 public class ProcessDefinitionUtil {
 
+    public static ProcessDefinitionEntity getProcessDefinition(Long processDefinitionId) {
+        return Context.getProcessEngineService().getDeploymentService()
+                .findDeployedProcessDefinitionById(processDefinitionId);
+    }
+
     public static Process getProcess(Long processDefinitionId) {
         final DeploymentService deploymentService = Context.getCommandContext()
                 .getDeploymentService();

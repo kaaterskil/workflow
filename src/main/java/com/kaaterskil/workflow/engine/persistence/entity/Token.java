@@ -78,7 +78,7 @@ public class Token implements ProcessInstance, DelegateToken {
     @MapKey(name = "tokenId")
     private final Map<String, VariableEntity> variables = new HashMap<>();
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Token> childTokens = new ArrayList<>();
 
     @OneToMany(mappedBy = "token", fetch = FetchType.EAGER)

@@ -1,10 +1,7 @@
 package com.kaaterskil.workflow.engine.bpm;
 
-import org.springframework.beans.BeansException;
-
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEvent;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventListener;
-import com.kaaterskil.workflow.engine.exception.WorkflowException;
 import com.kaaterskil.workflow.engine.util.ApplicationContextUtil;
 
 public class DelegateWorkflowEventListener extends AbstractDelegateEventListener {
@@ -38,19 +35,10 @@ public class DelegateWorkflowEventListener extends AbstractDelegateEventListener
         this.className = className;
     }
 
-    protected WorkflowEventListener getDelegateInstance() {
+    public WorkflowEventListener getDelegateInstance() {
         if (delegateInstance == null) {
-            try {
-                final Object instance = ApplicationContextUtil.getBean(className);
-                if (instance instanceof WorkflowEventListener) {
-                    delegateInstance = (WorkflowEventListener) instance;
-                } else {
-                    throw new IllegalArgumentException(
-                            "Class " + className + " does not implement WorkflowEventListener");
-                }
-            } catch (final BeansException e) {
-                throw new WorkflowException("Could not instantiate bean " + className);
-            }
+            delegateInstance = ApplicationContextUtil.instantiate(className,
+                    WorkflowEventListener.class);
         }
         return delegateInstance;
     }

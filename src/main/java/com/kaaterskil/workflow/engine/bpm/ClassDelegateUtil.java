@@ -16,7 +16,7 @@ public class ClassDelegateUtil {
     public static Object createDelegate(String className,
             List<FieldDeclaration> fieldDeclarations) {
         try {
-            final Object object = ApplicationContextUtil.getBean(className);
+            final Object object = ApplicationContextUtil.instantiate(className, Object.class);
             applyFieldDeclarations(fieldDeclarations, object);
             return object;
         } catch (final BeansException e) {

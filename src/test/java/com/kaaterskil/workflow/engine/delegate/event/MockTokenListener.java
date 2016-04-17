@@ -9,14 +9,25 @@ import com.kaaterskil.workflow.engine.delegate.TokenListener;
 @Component
 public class MockTokenListener extends BaseElement implements TokenListener {
 
+    private String message;
+
     @Override
     public void notify(DelegateToken token) {
-        System.out.println("Token listener called with token " + token.getId());
+        setMessage("Token listener called for token " + token.getId());
+        System.out.println(message);
     }
 
     @Override
     public String toString() {
-        return String.format("MockTokenListener []");
+        return String.format("MockTokenListener [message=%s]", message);
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
 }

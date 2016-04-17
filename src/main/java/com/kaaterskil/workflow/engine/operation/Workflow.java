@@ -32,7 +32,7 @@ public class Workflow {
 
     public void addOperation(Runnable operation, Token token) {
         operations.add(operation);
-        log.debug("Operation {} added to workflow", operation);
+        log.debug("Operation {} added to workflow", operation.getClass().getSimpleName());
 
         if (token != null) {
             commandContext.addToken(token);
