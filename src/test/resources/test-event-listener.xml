@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process processType="PRIVATE" isExecutable="true" name="Hello World">
+	<flowElements>
+		<startEvent id="start_1" name="startProcess" />
+		<sequenceFlow id="flow_1" sourceRef="start_1" targetRef="task_1">
+			<tokenListener
+				implementation="com.kaaterskil.workflow.engine.delegate.event.MockTokenListener"
+				events="ACTIVITY_STARTED" />
+		</sequenceFlow>
+		<serviceTask id="task_1" name="Do something">
+			<documentation text="This is a task to do something" />
+			<documentation text="And this is another note" />
+		</serviceTask>
+		<sequenceFlow id="flow_2" sourceRef="task_1" targetRef="end_1" />
+		<endEvent id="end_1" name="EndProcess" />
+	</flowElements>
+	<extensionElements>
+		<listener class="com.kaaterskil.workflow.engine.delegate.event.MockEventListener"></listener>
+	</extensionElements>
+	<properties>
+		<property id="prop_1" name="Property 1" />
+		<property id="prop_2" name="Property 2" />
+		<property id="prop_3" name="Property 3" />
+	</properties>
+</process>

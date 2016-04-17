@@ -1,5 +1,10 @@
 package com.kaaterskil.workflow.engine.delegate.event;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.kaaterskil.workflow.util.ValidationUtils;
+
 public enum WorkflowEventType {
 
     /**
@@ -109,4 +114,27 @@ public enum WorkflowEventType {
      * Process instance is cancelled by API call RuntimeService.deleteProcessInstance
      */
     PROCESS_CANCELLED, HISTORIC_PROCESS_INSTANCE_CREATED, HISTORIC_PROCESS_INSTANCE_ENDED;
+
+    /**
+     * Parses a comma-delimited string into a list of event types.
+     *
+     * @param eventTypes
+     * @return
+     */
+    public static WorkflowEventType[] parseTypes(String eventTypes) {
+        final WorkflowEventType[] emptyArray = new WorkflowEventType[] {};
+        final List<WorkflowEventType> result = new ArrayList<>();
+
+        if (!ValidationUtils.isEmptyOrWhitespace(eventTypes)) {
+            final String[] matches = eventTypes.split(",");
+            final int len = matches.length;
+            for (int i = 0; i < len; i++) {
+                final WorkflowEventType type = WorkflowEventType.valueOf(matches[i].trim());
+                if (!result.contains(type)) {
+                    result.add(type);
+                }
+            }
+        }
+        return result.toArray(emptyArray);
+    }
 }

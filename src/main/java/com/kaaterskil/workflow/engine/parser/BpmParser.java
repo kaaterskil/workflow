@@ -8,15 +8,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.oxm.XmlMappingException;
 
+import com.kaaterskil.workflow.bpm.ImplementationType;
+import com.kaaterskil.workflow.bpm.Listener;
 import com.kaaterskil.workflow.bpm.common.FlowElement;
 import com.kaaterskil.workflow.bpm.common.SequenceFlow;
 import com.kaaterskil.workflow.bpm.common.process.Process;
-import com.kaaterskil.workflow.bpm.foundation.Documentation;
 import com.kaaterskil.workflow.engine.context.Context;
+import com.kaaterskil.workflow.engine.delegate.TokenListener;
 import com.kaaterskil.workflow.engine.deploy.ParsedDeployment;
 import com.kaaterskil.workflow.engine.exception.WorkflowException;
 import com.kaaterskil.workflow.engine.persistence.entity.DeploymentEntity;
 import com.kaaterskil.workflow.engine.persistence.entity.ProcessDefinitionEntity;
+import com.kaaterskil.workflow.engine.util.ApplicationContextUtil;
 import com.kaaterskil.workflow.util.FileUtil;
 import com.kaaterskil.workflow.util.ValidationUtils;
 import com.kaaterskil.workflow.util.XmlConverter;
@@ -43,7 +46,6 @@ public class BpmParser {
         try {
             readFile();
             parseProcess();
-            createProcessDefinition();
 
             log.debug("Parsing fileName {} completed", fileName);
             return new ParsedDeployment(deployment, processDefinition, process, xml);
@@ -75,44 +77,32 @@ public class BpmParser {
     public void processFlowElements(List<FlowElement> flowElements) {
         final List<SequenceFlow> sequenceFlows = new ArrayList<>();
 
-        for(final FlowElement flowElement : flowElements) {
-            if(flowElement instanceof SequenceFlow) {
+        for (final FlowElement flowElement : flowElements) {
+            if (flowElement instanceof SequenceFlow) {
                 sequenceFlows.add((SequenceFlow) flowElement);
             }
+            processTokenListeners(flowElement);
         }
-        for(final SequenceFlow sequenceFlow : sequenceFlows) {
+        for (final SequenceFlow sequenceFlow : sequenceFlows) {
             parseHelper.parseElement(this, sequenceFlow);
         }
     }
 
-    private void createProcessDefinition() {
-        log.debug("Creating process definition from parsed process");
+    private void processTokenListeners(FlowElement flowElement) {
+        final List<Listener> listeners = flowElement.getTokenListeners();
 
-        final ProcessDefinitionEntity entity = Context.getCommandContext()
-                .getProcessDefinitionService().create();
-        entity.setKey(process.getId());
-        entity.setName(process.getName());
-        entity.setDescription(formatDocumentation(process));
-        entity.setDeploymentId(deployment.getId());
+        if (listeners != null && !listeners.isEmpty()) {
+            for (final Listener listener : listeners) {
+                final String beanName = listener.getImplementation();
 
-        processDefinition = entity;
-    }
-
-    private String formatDocumentation(Process process) {
-        final List<Documentation> documentation = process.getDocumentation();
-        if (documentation != null && !documentation.isEmpty()) {
-            final StringBuffer sb = new StringBuffer();
-            boolean first = true;
-            for (final Documentation each : documentation) {
-                if(!first) {
-                    sb.append(" ");
+                if (!ValidationUtils.isEmptyOrWhitespace(beanName)
+                        && listener.getImplementationType().equals(ImplementationType.CLASS)) {
+                    final TokenListener tokenListener = ApplicationContextUtil.instantiate(beanName,
+                            TokenListener.class);
+                    listener.setInstance(tokenListener);
                 }
-                sb.append(each.getText());
-                first = false;
             }
-            return sb.toString();
         }
-        return null;
     }
 
     /*---------- Getter/Setters ----------*/
@@ -129,12 +119,20 @@ public class BpmParser {
         return processDefinition;
     }
 
+    public void setProcessDefinition(ProcessDefinitionEntity processDefinition) {
+        this.processDefinition = processDefinition;
+    }
+
     public BpmParseHelper getParseHelper() {
         return parseHelper;
     }
 
     public void setParseHelper(BpmParseHelper parseHelper) {
         this.parseHelper = parseHelper;
+    }
+
+    public DeploymentEntity getDeployment() {
+        return deployment;
     }
 
 }

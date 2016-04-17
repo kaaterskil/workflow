@@ -7,7 +7,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+
+import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventUtil;
 
 @Entity
 @Table(name = "wf_def_process_definitions",
@@ -40,6 +43,17 @@ public class ProcessDefinitionEntity {
 
     @Column(name = "version", nullable = false)
     private int version;
+
+    /*---------- Instance properties ----------*/
+
+    @Transient
+    private final transient WorkflowEventUtil eventHelper = new WorkflowEventUtil();
+
+    public WorkflowEventUtil getEventHelper() {
+        return eventHelper;
+    }
+
+    /*---------- Methods ----------*/
 
     @Override
     public String toString() {

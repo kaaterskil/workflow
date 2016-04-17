@@ -28,6 +28,8 @@ public class BpmDeployer implements Deployer {
 
         cacheManager.updateCache(parsedDeployment);
 
+        log.debug(parser.getProcess().toString());
+
         dispatchProcessDefinitionInitializedEvent(parsedDeployment);
     }
 

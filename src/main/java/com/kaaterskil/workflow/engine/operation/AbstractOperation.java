@@ -3,13 +3,13 @@ package com.kaaterskil.workflow.engine.operation;
 import java.util.List;
 
 import com.kaaterskil.workflow.bpm.HasTokenListeners;
+import com.kaaterskil.workflow.bpm.ImplementationType;
 import com.kaaterskil.workflow.bpm.Listener;
 import com.kaaterskil.workflow.bpm.common.FlowElement;
 import com.kaaterskil.workflow.bpm.common.process.Process;
 import com.kaaterskil.workflow.engine.context.Context;
 import com.kaaterskil.workflow.engine.delegate.TokenListener;
 import com.kaaterskil.workflow.engine.interceptor.CommandContext;
-import com.kaaterskil.workflow.engine.parser.ImplementationType;
 import com.kaaterskil.workflow.engine.parser.ListenerFactory;
 import com.kaaterskil.workflow.engine.persistence.entity.Token;
 import com.kaaterskil.workflow.engine.util.ProcessDefinitionUtil;
@@ -48,12 +48,12 @@ public abstract class AbstractOperation implements Runnable {
 
         if (listeners != null) {
             for (final Listener listener : listeners) {
-                if(eventType.equals(listener.getEventRef())) {
+                if(eventType.equals(listener.getEventRefs())) {
                     TokenListener tokenListener = null;
 
-                    if(ImplementationType.CLASS.getMeaning().equalsIgnoreCase(listener.getImplementationType())) {
+                    if(listener.getImplementationType().equals(ImplementationType.CLASS)) {
                         tokenListener = listenerFactory.createClassDelegateTokenListener(listener);
-                    } else {
+                    } else if(listener.getImplementationType().equals(ImplementationType.INSTANCE)) {
                         tokenListener = (TokenListener) listener.getInstance();
                     }
 

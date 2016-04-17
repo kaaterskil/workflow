@@ -1,26 +1,28 @@
 package com.kaaterskil.workflow.engine.parser;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import com.kaaterskil.workflow.bpm.foundation.ExtensionAttribute;
+import javax.xml.namespace.QName;
 
 public abstract class AbstractBehaviorFactory {
 
-    public List<FieldDeclaration> createFieldDeclarations(
-            Collection<ExtensionAttribute> collection) {
+    public List<FieldDeclaration> createFieldDeclarations(Map<QName, Object> elementAttributes) {
         final List<FieldDeclaration> fieldDeclarations = new ArrayList<>();
-        if (collection != null && !collection.isEmpty()) {
-            for (final ExtensionAttribute attribute : collection) {
-                if (attribute != null) {
-                    final FieldDeclaration declaration = new FieldDeclaration(attribute.getName(),
-                            attribute.getType(), attribute.getValue());
+        if(elementAttributes != null && !elementAttributes.isEmpty()) {
+            for(final Entry<QName, Object> entry : elementAttributes.entrySet()) {
+                if(entry != null) {
+                    final String name = entry.getKey().getLocalPart();
+                    final Object value = entry.getValue();
+                    final String type = value.getClass().getCanonicalName();
+
+                    final FieldDeclaration declaration = new FieldDeclaration(name, type, value);
                     fieldDeclarations.add(declaration);
                 }
             }
         }
-
         return fieldDeclarations;
     }
 }

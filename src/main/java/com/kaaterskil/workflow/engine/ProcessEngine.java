@@ -24,6 +24,10 @@ public class ProcessEngine {
         return processEngineService;
     }
 
+    public RepositoryService getRepositoryService() {
+        return processEngineService.getRepositoryService();
+    }
+
     public RuntimeService getRuntimeService() {
         return runtimeService;
     }
