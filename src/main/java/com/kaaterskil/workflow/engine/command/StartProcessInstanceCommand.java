@@ -46,7 +46,7 @@ public class StartProcessInstanceCommand implements Command<ProcessInstance> {
 
         } else {
             throw new IllegalArgumentException(
-                    "process definition key and process definition id are both null");
+                    "Process definition key and process definition id are both null");
         }
 
         return ProcessInstanceUtil.createAndStartProcessInstance(processDefinition, variables);

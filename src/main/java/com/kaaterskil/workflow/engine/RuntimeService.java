@@ -1,5 +1,7 @@
 package com.kaaterskil.workflow.engine;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
 
 import com.kaaterskil.workflow.engine.command.AddEventListenerCommand;
@@ -14,14 +16,21 @@ import com.kaaterskil.workflow.engine.runtime.ProcessInstance;
 public class RuntimeService extends AbstractService {
 
     public ProcessInstance startProcessInstanceByKey(String processDefinitionKey) {
-        return commandExecutor.execute(new StartProcessInstanceCommand(processDefinitionKey, null, null));
+        return commandExecutor
+                .execute(new StartProcessInstanceCommand(processDefinitionKey, null, null));
+    }
+
+    public ProcessInstance startProcessInstanceByKey(String processDefinitionKey,
+            Map<String, Object> variables) {
+        return commandExecutor
+                .execute(new StartProcessInstanceCommand(processDefinitionKey, null, variables));
     }
 
     public void addEventListener(WorkflowEventListener listener) {
         commandExecutor.execute(new AddEventListenerCommand(listener));
     }
 
-    public void addEventListener(WorkflowEventListener listener, WorkflowEventType...eventTypes) {
+    public void addEventListener(WorkflowEventListener listener, WorkflowEventType... eventTypes) {
         commandExecutor.execute(new AddEventListenerCommand(listener, eventTypes));
     }
 

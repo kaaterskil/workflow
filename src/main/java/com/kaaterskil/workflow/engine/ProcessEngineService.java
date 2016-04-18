@@ -43,6 +43,14 @@ import com.kaaterskil.workflow.engine.parser.handler.StartEventParseHandler;
 import com.kaaterskil.workflow.engine.persistence.entity.EventSubscriptionType;
 import com.kaaterskil.workflow.engine.service.DeploymentService;
 import com.kaaterskil.workflow.engine.service.TokenService;
+import com.kaaterskil.workflow.engine.variable.BooleanType;
+import com.kaaterskil.workflow.engine.variable.ByteArrayType;
+import com.kaaterskil.workflow.engine.variable.DateType;
+import com.kaaterskil.workflow.engine.variable.FloatType;
+import com.kaaterskil.workflow.engine.variable.IntegerType;
+import com.kaaterskil.workflow.engine.variable.LongType;
+import com.kaaterskil.workflow.engine.variable.StringType;
+import com.kaaterskil.workflow.engine.variable.VariableTypeHelper;
 
 @Component
 public class ProcessEngineService {
@@ -69,6 +77,7 @@ public class ProcessEngineService {
     private BpmParseHelper bpmParseHelper;
     private List<Deployer> deployers;
     private DeploymentCache<ProcessDefinitionCacheEntry> processDefinitionCache;
+    private VariableTypeHelper variableTypeHelper;
 
     private CommandContextFactory commandContextFactory;
     private ProcessEngine processEngine;
@@ -99,6 +108,7 @@ public class ProcessEngineService {
     }
 
     private void init() {
+        initVariableTypeHelper();
         initCommandContextFactory();
         initCommandExecutors();
         initServices();
@@ -111,6 +121,20 @@ public class ProcessEngineService {
         initDelegateInterceptor();
         initEventHandlers();
         initEventDispatcher();
+    }
+
+    private void initVariableTypeHelper() {
+        if(variableTypeHelper == null) {
+            variableTypeHelper = new VariableTypeHelper();
+
+            variableTypeHelper.addType(new BooleanType());
+            variableTypeHelper.addType(new IntegerType());
+            variableTypeHelper.addType(new LongType());
+            variableTypeHelper.addType(new DateType());
+            variableTypeHelper.addType(new FloatType());
+            variableTypeHelper.addType(new StringType());
+            variableTypeHelper.addType(new ByteArrayType());
+        }
     }
 
     private void initCommandContextFactory() {
@@ -290,6 +314,14 @@ public class ProcessEngineService {
     }
 
     /*---------- Getter/Setters ----------*/
+
+    public VariableTypeHelper getVariableTypeHelper() {
+        return variableTypeHelper;
+    }
+
+    public void setVariableTypeHelper(VariableTypeHelper variableTypeHelper) {
+        this.variableTypeHelper = variableTypeHelper;
+    }
 
     public RuntimeService getRuntimeService() {
         return runtimeService;

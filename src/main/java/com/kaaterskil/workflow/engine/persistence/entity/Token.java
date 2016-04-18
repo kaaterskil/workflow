@@ -28,9 +28,10 @@ import com.kaaterskil.workflow.bpm.common.FlowElement;
 import com.kaaterskil.workflow.bpm.common.process.Process;
 import com.kaaterskil.workflow.engine.context.Context;
 import com.kaaterskil.workflow.engine.delegate.DelegateToken;
-import com.kaaterskil.workflow.engine.persistence.mapper.VariableMapper;
 import com.kaaterskil.workflow.engine.runtime.ProcessInstance;
 import com.kaaterskil.workflow.engine.util.ProcessDefinitionUtil;
+import com.kaaterskil.workflow.engine.variable.VariableType;
+import com.kaaterskil.workflow.engine.variable.VariableTypeHelper;
 
 @Entity
 @Table(name = "wf_run_tokens")
@@ -111,7 +112,7 @@ public class Token implements ProcessInstance, DelegateToken {
 
     @Override
     public Long getParentId() {
-        if(parent != null) {
+        if (parent != null) {
             return parent.getId();
         }
         return null;
@@ -119,7 +120,7 @@ public class Token implements ProcessInstance, DelegateToken {
 
     @Override
     public String getActivityId() {
-        if(currentActivity != null) {
+        if (currentActivity != null) {
             return currentActivity;
         }
         return null;
@@ -164,15 +165,23 @@ public class Token implements ProcessInstance, DelegateToken {
 
     @Override
     public void setVariable(String variableName, Object value) {
-        if(variableName != null) {
+        if (variableName != null) {
             VariableEntity variable = null;
-            if(value instanceof VariableEntity) {
+            if (value instanceof VariableEntity) {
                 variable = (VariableEntity) value;
             } else {
-                variable = VariableMapper.toEntity(variableName, value);
+                variable = createVariableInstance(variableName, value);
             }
             variables.put(variableName, variable);
         }
+    }
+
+    private VariableEntity createVariableInstance(String name, Object value) {
+        final VariableTypeHelper helper = Context.getProcessEngineService().getVariableTypeHelper();
+        final VariableType type = helper.findTypeForValue(value);
+
+        return Context.getCommandContext().getVariableService().createAndInsert(name, type, value,
+                this);
     }
 
     @Override
@@ -198,12 +207,17 @@ public class Token implements ProcessInstance, DelegateToken {
     @Override
     public Map<String, Object> getVariables() {
         final Map<String, Object> result = new HashMap<>();
-        if(variables != null && !variables.isEmpty()) {
-            for(final String key : variables.keySet()) {
+
+        if (variables != null && !variables.isEmpty()) {
+            final VariableTypeHelper helper = Context.getProcessEngineService()
+                    .getVariableTypeHelper();
+
+            for (final String key : variables.keySet()) {
                 final VariableEntity each = variables.get(key);
                 Object value = null;
-                if(each != null) {
-                    value = VariableMapper.toInstance(each);
+                if (each != null) {
+                    final VariableType type = helper.getType(each.getValueType());
+                    value = type.getValue(each);
                 }
                 result.put(key, value);
             }
@@ -221,7 +235,7 @@ public class Token implements ProcessInstance, DelegateToken {
                     if (each instanceof VariableEntity) {
                         variable = (VariableEntity) each;
                     } else {
-                        variable = VariableMapper.toEntity(variableName, each);
+                        variable = createVariableInstance(variableName, each);
                         variable.setName(variableName);
                         variable.setTokenId(this.getId());
                         variable.setProcessInstanceId(this.getProcessInstanceId());
@@ -243,7 +257,7 @@ public class Token implements ProcessInstance, DelegateToken {
 
     @Override
     public FlowElement getCurrentFlowElement() {
-        if(currentFlowElement == null) {
+        if (currentFlowElement == null) {
             final Process process = ProcessDefinitionUtil.getProcess(getProcessDefinitionId());
             currentFlowElement = process.getFlowElement(getCurrentActivityId(), true);
         }
@@ -253,7 +267,7 @@ public class Token implements ProcessInstance, DelegateToken {
     @Override
     public void setCurrentFlowElement(FlowElement currentFlowElement) {
         this.currentFlowElement = currentFlowElement;
-        if(currentFlowElement != null) {
+        if (currentFlowElement != null) {
             currentActivity = currentFlowElement.getId();
         } else {
             currentActivity = null;
@@ -409,7 +423,7 @@ public class Token implements ProcessInstance, DelegateToken {
     }
 
     public List<JobEntity> getJobs() {
-        if(jobs == null) {
+        if (jobs == null) {
             jobs = Context.getCommandContext().getJobService().findByTokenId(id);
         }
         return jobs;

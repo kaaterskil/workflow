@@ -11,10 +11,14 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+import com.kaaterskil.workflow.engine.variable.VariableAccessors;
+import com.kaaterskil.workflow.engine.variable.VariableType;
 
 @Entity
 @Table(name = "wf_run_variables")
-public class VariableEntity {
+public class VariableEntity implements VariableAccessors {
 
     @Id
     @SequenceGenerator(name = "wf_run_variables_id_seq_gen",
@@ -34,22 +38,25 @@ public class VariableEntity {
     private String name;
 
     @Column(name = "value_type", length = 100)
-    private String type;
+    private String valueType;
+
+    @Column(name = "boolean_value")
+    private Boolean booleanValue;
+
+    @Column(name = "int_value")
+    private Integer intValue;
+
+    @Column(name = "long_value")
+    private Long longValue;
+
+    @Column(name = "float_value")
+    private Float floatValue;
 
     @Column(name = "string_value")
     private String stringValue;
 
-    @Column(name = "long_value")
-    private long longValue;
-
-    @Column(name = "int_value")
-    private int intValue;
-
-    @Column(name = "float_value")
-    private float floatValue;
-
-    @Column(name = "boolean_value")
-    private boolean booleanValue;
+    @Column(name = "byte_value")
+    private byte[] byteValue;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
@@ -58,6 +65,45 @@ public class VariableEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    /*---------- Instance properties ----------*/
+
+    @Transient
+    private VariableType type;
+
+    @Transient
+    private Object cachedValue;
+
+    public VariableType getType() {
+        return type;
+    }
+
+    public void setType(VariableType type) {
+        this.type = type;
+    }
+
+    public Object getCachedValue() {
+        return cachedValue;
+    }
+
+    public void setCachedValue(Object cachedValue) {
+        this.cachedValue = cachedValue;
+    }
+
+    /*---------- Methods ----------*/
+
+    public Object getValue() {
+        if(cachedValue == null) {
+            cachedValue = type.getValue(this);
+        }
+        return cachedValue;
+    }
+
+    public void setValue(Object value) {
+        type.setValue(value, this);
+        valueType = type.getType();
+        cachedValue = value;
+    }
 
     /*---------- Getter/Setters ----------*/
 
@@ -85,6 +131,7 @@ public class VariableEntity {
         this.tokenId = tokenId;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -93,52 +140,72 @@ public class VariableEntity {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String getValueType() {
+        return valueType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setValueType(String valueType) {
+        this.valueType = valueType;
     }
 
+    @Override
+    public Boolean getBooleanValue() {
+        return booleanValue;
+    }
+
+    @Override
+    public void setBooleanValue(Boolean booleanValue) {
+        this.booleanValue = booleanValue;
+    }
+
+    @Override
+    public Integer getIntValue() {
+        return intValue;
+    }
+
+    @Override
+    public void setIntValue(Integer intValue) {
+        this.intValue = intValue;
+    }
+
+    @Override
+    public Long getLongValue() {
+        return longValue;
+    }
+
+    @Override
+    public void setLongValue(Long longValue) {
+        this.longValue = longValue;
+    }
+
+    @Override
+    public Float getFloatValue() {
+        return floatValue;
+    }
+
+    @Override
+    public void setFloatValue(Float floatValue) {
+        this.floatValue = floatValue;
+    }
+
+    @Override
     public String getStringValue() {
         return stringValue;
     }
 
+    @Override
     public void setStringValue(String stringValue) {
         this.stringValue = stringValue;
     }
 
-    public long getLongValue() {
-        return longValue;
+    @Override
+    public byte[] getByteValue() {
+        return byteValue;
     }
 
-    public void setLongValue(long longValue) {
-        this.longValue = longValue;
-    }
-
-    public int getIntValue() {
-        return intValue;
-    }
-
-    public void setIntValue(int intValue) {
-        this.intValue = intValue;
-    }
-
-    public float getFloatValue() {
-        return floatValue;
-    }
-
-    public void setFloatValue(float floatValue) {
-        this.floatValue = floatValue;
-    }
-
-    public boolean isBooleanValue() {
-        return booleanValue;
-    }
-
-    public void setBooleanValue(boolean booleanValue) {
-        this.booleanValue = booleanValue;
+    @Override
+    public void setByteValue(byte[] byteValue) {
+        this.byteValue = byteValue;
     }
 
     public Date getCreatedAt() {
