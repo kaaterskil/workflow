@@ -60,6 +60,7 @@ BEGIN
  		int_value 				integer,
  		float_value				numeric(5),
  		boolean_value 			boolean,
+ 		byte_value              bytea,
  		created_at 				timestamp(6) WITHOUT TIME ZONE,
  		updated_at 				timestamp(6) WITHOUT TIME ZONE,
  		CONSTRAINT wf_run_variables_pk PRIMARY KEY (variable_id)
