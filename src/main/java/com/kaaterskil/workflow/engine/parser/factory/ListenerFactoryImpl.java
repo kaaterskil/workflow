@@ -25,12 +25,14 @@ public class ListenerFactoryImpl extends AbstractBehaviorFactory implements List
 
     @Override
     public TokenListener createClassDelegateTokenListener(Listener listener) {
-        return classDelegateFactory.create(listener.getImplementation(), createFieldDeclarations(listener.getExtensionAttributes()));
+        return classDelegateFactory.create(listener.getImplementation(),
+                createFieldDeclarations(extractFieldExtensions(listener)));
     }
 
     @Override
     public WorkflowEventListener createClassDelegateEventListener(Listener listener) {
-        return new DelegateWorkflowEventListener(listener.getImplementation(), getEntityClazz(listener.getEntityType()));
+        return new DelegateWorkflowEventListener(listener.getImplementation(),
+                getEntityClazz(listener.getEntityType()));
     }
 
     private Class<?> getEntityClazz(String entityType) {

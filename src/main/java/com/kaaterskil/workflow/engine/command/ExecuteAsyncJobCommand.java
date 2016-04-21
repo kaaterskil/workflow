@@ -3,7 +3,6 @@ package com.kaaterskil.workflow.engine.command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.kaaterskil.workflow.engine.context.Context;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventFactory;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventType;
 import com.kaaterskil.workflow.engine.interceptor.CommandContext;
@@ -28,7 +27,7 @@ public class ExecuteAsyncJobCommand implements Command<Object> {
 
         commandContext.getJobService().execute(job);
 
-        Context.getProcessEngineService().getEventDispatcher().dispatchEvent(WorkflowEventFactory
+        commandContext.getEventDispatcher().dispatchEvent(WorkflowEventFactory
                 .createEntityEvent(WorkflowEventType.JOB_EXECUTION_SUCCESS, job));
 
         return null;

@@ -55,7 +55,7 @@ public class CommandInvoker extends CommandInterceptor {
             final AbstractOperation operation = (AbstractOperation) runnable;
 
             if (operation.getToken() == null || !operation.getToken().isEnded()) {
-                log.debug("Executing operation " + operation.getClass().getName());
+                log.debug("Executing operation " + operation.getClass().getSimpleName());
                 runnable.run();
             }
         } else {

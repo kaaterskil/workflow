@@ -8,6 +8,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.kaaterskil.workflow.engine.behavior.BehaviorHelper;
+import com.kaaterskil.workflow.engine.behavior.handler.ServiceTaskBehaviorHandler;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventDispatcher;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventDispatcherImpl;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventListener;
@@ -89,6 +91,7 @@ public class ProcessEngineService {
 
     private ListenerFactory listenerFactory;
     private ActivityBehaviorFactory activityBehaviorFactory;
+    private BehaviorHelper behaviorHelper;
     private DelegateInterceptor delegateInterceptor;
 
     private Map<EventSubscriptionType, EventHandler> eventHandlers;
@@ -115,6 +118,7 @@ public class ProcessEngineService {
         initListenerFactory();
         initActivityBehaviorFactory();
         initBpmParseHelper();
+        initBehaviorHelper();
         initDeployers();
         initJobHandlers();
         initAsyncExecutor();
@@ -216,6 +220,14 @@ public class ProcessEngineService {
             defaultHandlers.add(new StartEventParseHandler());
 
             bpmParseHelper.addHandlers(defaultHandlers);
+        }
+    }
+
+    private void initBehaviorHelper() {
+        if(behaviorHelper == null) {
+            behaviorHelper = new BehaviorHelper();
+
+            behaviorHelper.addHandler(new ServiceTaskBehaviorHandler());
         }
     }
 
@@ -393,6 +405,14 @@ public class ProcessEngineService {
 
     public void setBpmParseHelper(BpmParseHelper bpmParseHelper) {
         this.bpmParseHelper = bpmParseHelper;
+    }
+
+    public BehaviorHelper getBehaviorHelper() {
+        return behaviorHelper;
+    }
+
+    public void setBehaviorHelper(BehaviorHelper behaviorHelper) {
+        this.behaviorHelper = behaviorHelper;
     }
 
     public DeploymentCache<ProcessDefinitionCacheEntry> getProcessDefinitionCache() {

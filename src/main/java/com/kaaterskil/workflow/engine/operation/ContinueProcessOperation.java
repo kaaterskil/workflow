@@ -12,7 +12,7 @@ import com.kaaterskil.workflow.bpm.common.SequenceFlow;
 import com.kaaterskil.workflow.bpm.common.event.BoundaryEvent;
 import com.kaaterskil.workflow.bpm.common.event.CompensateEventDefinition;
 import com.kaaterskil.workflow.bpm.common.process.Process;
-import com.kaaterskil.workflow.engine.behavior.BehaviorUtil;
+import com.kaaterskil.workflow.engine.behavior.BehaviorHelper;
 import com.kaaterskil.workflow.engine.context.Context;
 import com.kaaterskil.workflow.engine.delegate.ActivityBehavior;
 import com.kaaterskil.workflow.engine.delegate.TokenListener;
@@ -24,7 +24,6 @@ import com.kaaterskil.workflow.engine.executor.JobHandler;
 import com.kaaterskil.workflow.engine.interceptor.CommandContext;
 import com.kaaterskil.workflow.engine.persistence.entity.MessageEntity;
 import com.kaaterskil.workflow.engine.persistence.entity.Token;
-import com.kaaterskil.workflow.engine.util.ApplicationContextUtil;
 import com.kaaterskil.workflow.engine.util.ProcessDefinitionUtil;
 
 public class ContinueProcessOperation extends AbstractOperation {
@@ -94,7 +93,8 @@ public class ContinueProcessOperation extends AbstractOperation {
             }
         }
 
-        final ActivityBehavior behavior = BehaviorUtil.getBehaviorBean(flowNode);
+        final BehaviorHelper behaviorHelper = Context.getProcessEngineService().getBehaviorHelper();
+        final ActivityBehavior behavior = behaviorHelper.getBehavior(flowNode);
         if (behavior != null) {
             log.debug("executing activityBehavior {} on activity {} with token {}",
                     behavior.getClass(), flowNode.getId(), token.getId());
@@ -148,9 +148,10 @@ public class ContinueProcessOperation extends AbstractOperation {
             childToken.setCurrentFlowElement(event);
             childToken.setScope(false);
 
+            final BehaviorHelper behaviorHelper = Context.getProcessEngineService()
+                    .getBehaviorHelper();
+            final ActivityBehavior behavior = behaviorHelper.getBehavior(event);
             try {
-                final ActivityBehavior behavior = (ActivityBehavior) ApplicationContextUtil
-                        .getBean(event.getBehavior());
                 behavior.execute(childToken);
             } catch (final Exception e) {
                 throw new WorkflowException(

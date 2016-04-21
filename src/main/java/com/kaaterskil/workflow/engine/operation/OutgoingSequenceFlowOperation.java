@@ -100,7 +100,8 @@ public class OutgoingSequenceFlowOperation extends AbstractOperation {
 
     private void leaveFlowNode(FlowNode flowNode) {
         log.debug("Leaving flow node {} with id {} by following its {} outgoing sequence flow",
-                flowNode.getClass(), flowNode.getId(), flowNode.getOutgoing().size());
+                flowNode.getClass().getSimpleName(), flowNode.getId(),
+                flowNode.getOutgoing().size());
 
         // Get the default sequence flow
         String defaultSequenceFlowId = null;
@@ -117,8 +118,8 @@ public class OutgoingSequenceFlowOperation extends AbstractOperation {
         // Test condition
         final List<SequenceFlow> outgoingSequenceFlow = new ArrayList<>();
         for (final SequenceFlow sequenceFlow : flowNode.getOutgoing()) {
-            if (!evaluateConditions
-                    || (ConditionUtil.isTrue(sequenceFlow, token) && (defaultSequenceFlowId == null
+            if (!evaluateConditions || (evaluateConditions
+                    && ConditionUtil.isTrue(sequenceFlow, token) && (defaultSequenceFlowId == null
                             || !defaultSequenceFlowId.equals(sequenceFlow.getId())))) {
                 outgoingSequenceFlow.add(sequenceFlow);
             }

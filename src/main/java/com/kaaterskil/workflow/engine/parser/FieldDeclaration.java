@@ -4,9 +4,9 @@ public class FieldDeclaration {
 
     private String name;
     private String type;
-    private Object value;
+    private String value;
 
-    public FieldDeclaration(String name, String type, Object value) {
+    public FieldDeclaration(String name, String type, String value) {
         this.name = name;
         this.type = type;
         this.value = value;
@@ -33,11 +33,11 @@ public class FieldDeclaration {
         this.type = type;
     }
 
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(String value) {
         this.value = value;
     }
 }

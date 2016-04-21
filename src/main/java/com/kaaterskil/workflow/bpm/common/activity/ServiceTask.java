@@ -22,7 +22,7 @@ public class ServiceTask extends Task {
      * coordination protocol. A Web service is the default technology.
      */
     @XmlAttribute
-    private String implementation = "##webService";
+    private String implementation = "##WebService";
 
     /**
      * This attribute specifies the operation that is invoked by the Service Task.
@@ -35,13 +35,13 @@ public class ServiceTask extends Task {
     @Override
     public String toString() {
         return String.format(
-                "ServiceTask [implementation=%s, operationRef=%s, isForCompensation=%s, loopCharacteristics=%s, defaultSequenceFlow=%s, ioSpecification=%s, properties=%s, boundaryEventRefs=%s, dataInputAssociations=%s, dataOutputAssociations=%s, startQuantity=%s, completionQuantity=%s, state=%s, incoming=%s, outgoing=%s, isAsynchronous=%s, behavior=%s, name=%s, categoryValueRef=%s, tokenListeners=%s, subProcess=%s, id=%s, documentation=%s, extensionElements=%s, extensionAttributes=%s, getTokenListeners()=%s]",
+                "ServiceTask [implementation=%s, operationRef=%s, isForCompensation=%s, loopCharacteristics=%s, defaultSequenceFlow=%s, ioSpecification=%s, properties=%s, boundaryEventRefs=%s, dataInputAssociations=%s, dataOutputAssociations=%s, startQuantity=%s, completionQuantity=%s, state=%s, incoming=%s, outgoing=%s, isAsynchronous=%s, behavior=%s, name=%s, categoryValueRef=%s, tokenListeners=%s, subProcess=%s, id=%s, documentation=%s, extensionElements=%s, extensionAttributes=%s]",
                 implementation, operationRef, isForCompensation, loopCharacteristics,
                 defaultSequenceFlow, ioSpecification, properties, boundaryEventRefs,
                 dataInputAssociations, dataOutputAssociations, startQuantity, completionQuantity,
                 state, incoming, outgoing, isAsynchronous, behavior, name, categoryValueRef,
                 tokenListeners, subProcess, id, documentation, extensionElements,
-                extensionAttributes, getTokenListeners());
+                extensionAttributes);
     }
 
     /*---------- Getter/Setters ----------*/
