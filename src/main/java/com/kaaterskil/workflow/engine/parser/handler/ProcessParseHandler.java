@@ -17,6 +17,7 @@ import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventType;
 import com.kaaterskil.workflow.engine.parser.BpmParser;
 import com.kaaterskil.workflow.engine.parser.factory.ListenerFactory;
 import com.kaaterskil.workflow.engine.persistence.entity.ProcessDefinitionEntity;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 public class ProcessParseHandler extends AbstractParseHandler<Process> {
     private static final Logger log = LoggerFactory.getLogger(ProcessParseHandler.class);
@@ -54,7 +55,7 @@ public class ProcessParseHandler extends AbstractParseHandler<Process> {
 
     private String formatDocumentation(Process process) {
         final List<Documentation> documentation = process.getDocumentation();
-        if (documentation != null && !documentation.isEmpty()) {
+        if (CollectionUtil.isNotEmpty(documentation)) {
             final StringBuffer sb = new StringBuffer();
             boolean first = true;
             for (final Documentation each : documentation) {
@@ -72,7 +73,7 @@ public class ProcessParseHandler extends AbstractParseHandler<Process> {
     private void createEventListeners(List<Object> extensionElements,
             ProcessDefinitionEntity processDefinition) {
         final List<Listener> listeners = new ArrayList<>();
-        if (extensionElements != null && !extensionElements.isEmpty()) {
+        if (CollectionUtil.isNotEmpty(extensionElements)) {
             log.debug("Creating event listeners");
             for (final Object element : extensionElements) {
                 if (element instanceof Listener) {

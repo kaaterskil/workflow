@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kaaterskil.workflow.engine.behavior.BehaviorHelper;
+import com.kaaterskil.workflow.engine.behavior.handler.EndEventBehaviorHandler;
 import com.kaaterskil.workflow.engine.behavior.handler.ServiceTaskBehaviorHandler;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventDispatcher;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventDispatcherImpl;
@@ -38,6 +39,7 @@ import com.kaaterskil.workflow.engine.parser.BpmParseHelper;
 import com.kaaterskil.workflow.engine.parser.factory.ActivityBehaviorFactory;
 import com.kaaterskil.workflow.engine.parser.factory.ListenerFactory;
 import com.kaaterskil.workflow.engine.parser.factory.ListenerFactoryImpl;
+import com.kaaterskil.workflow.engine.parser.handler.EndEventParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.ParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.ProcessParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.SequenceFlowParseHandler;
@@ -218,6 +220,7 @@ public class ProcessEngineService {
             defaultHandlers.add(new ProcessParseHandler());
             defaultHandlers.add(new SequenceFlowParseHandler());
             defaultHandlers.add(new StartEventParseHandler());
+            defaultHandlers.add(new EndEventParseHandler());
 
             bpmParseHelper.addHandlers(defaultHandlers);
         }
@@ -228,6 +231,7 @@ public class ProcessEngineService {
             behaviorHelper = new BehaviorHelper();
 
             behaviorHelper.addHandler(new ServiceTaskBehaviorHandler());
+            behaviorHelper.addHandler(new EndEventBehaviorHandler());
         }
     }
 

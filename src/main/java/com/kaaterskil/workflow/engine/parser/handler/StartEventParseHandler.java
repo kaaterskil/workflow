@@ -7,6 +7,7 @@ import com.kaaterskil.workflow.bpm.common.event.StartEvent;
 import com.kaaterskil.workflow.bpm.foundation.BaseElement;
 import com.kaaterskil.workflow.engine.behavior.NoneStartEventActivityBehavior;
 import com.kaaterskil.workflow.engine.parser.BpmParser;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 public class StartEventParseHandler extends AbstractParseHandler<StartEvent> {
     private static final Logger log = LoggerFactory.getLogger(StartEventParseHandler.class);
@@ -20,7 +21,7 @@ public class StartEventParseHandler extends AbstractParseHandler<StartEvent> {
     protected void executeParse(BpmParser parser, StartEvent element) {
         log.debug("Parsing start event");
 
-        if (element.getEventDefinitions() == null || element.getEventDefinitions().isEmpty()) {
+        if (CollectionUtil.isNotEmpty(element.getEventDefinitions())) {
             element.setBehavior(NoneStartEventActivityBehavior.class.getCanonicalName());
         }
 

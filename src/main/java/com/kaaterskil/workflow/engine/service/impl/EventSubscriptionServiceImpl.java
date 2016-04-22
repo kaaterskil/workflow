@@ -24,6 +24,7 @@ import com.kaaterskil.workflow.engine.persistence.entity.Token;
 import com.kaaterskil.workflow.engine.persistence.repository.EventSubscriptionRepository;
 import com.kaaterskil.workflow.engine.service.EventSubscriptionService;
 import com.kaaterskil.workflow.engine.service.JobService;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 @Component
 public class EventSubscriptionServiceImpl implements EventSubscriptionService {
@@ -96,7 +97,7 @@ public class EventSubscriptionServiceImpl implements EventSubscriptionService {
                 .findByTokenIdAndEventType(tokenId, eventType);
 
         final List<CompensationEventSubscription> result = new ArrayList<>();
-        if (eventSubscriptions != null && !eventSubscriptions.isEmpty()) {
+        if (CollectionUtil.isNotEmpty(eventSubscriptions)) {
             for (final EventSubscription each : eventSubscriptions) {
                 if (each instanceof CompensationEventSubscription) {
                     result.add((CompensationEventSubscription) each);

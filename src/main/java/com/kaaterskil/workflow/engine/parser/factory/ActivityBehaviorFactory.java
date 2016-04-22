@@ -1,8 +1,14 @@
 package com.kaaterskil.workflow.engine.parser.factory;
 
 import com.kaaterskil.workflow.bpm.common.activity.ServiceTask;
+import com.kaaterskil.workflow.bpm.common.event.EndEvent;
+import com.kaaterskil.workflow.bpm.common.event.ErrorEventDefinition;
 import com.kaaterskil.workflow.bpm.common.event.StartEvent;
+import com.kaaterskil.workflow.engine.behavior.CancelEndEventActivityBehavior;
+import com.kaaterskil.workflow.engine.behavior.ErrorEndEventActivityBehavior;
+import com.kaaterskil.workflow.engine.behavior.NoneEndEventActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.NoneStartEventActivityBehavior;
+import com.kaaterskil.workflow.engine.behavior.TerminateEndEventActivityBehavior;
 import com.kaaterskil.workflow.engine.bpm.ClassDelegate;
 import com.kaaterskil.workflow.engine.bpm.ClassDelegateFactory;
 
@@ -22,6 +28,26 @@ public class ActivityBehaviorFactory extends AbstractBehaviorFactory {
     public ClassDelegate createClassDelegateServiceTask(ServiceTask task) {
         return classDelegateFactory.create(task.getImplementation(),
                 createFieldDeclarations(extractFieldExtensions(task)));
+    }
+
+    /*---------- End Events ----------*/
+
+    public NoneEndEventActivityBehavior createNoneEndEventActivityBehavior(EndEvent endEvent) {
+        return new NoneEndEventActivityBehavior();
+    }
+
+    public ErrorEndEventActivityBehavior createErrorEndEventActivityBehavior(EndEvent endEvent,
+            ErrorEventDefinition errorEventDefinition) {
+        return new ErrorEndEventActivityBehavior(errorEventDefinition.getErrorRef());
+    }
+
+    public CancelEndEventActivityBehavior createCancelEndEventActivityBehavior(EndEvent endEvent) {
+        return new CancelEndEventActivityBehavior();
+    }
+
+    public TerminateEndEventActivityBehavior createTerminateEndEventActivityBehavior(
+            EndEvent endEvent) {
+        return new TerminateEndEventActivityBehavior();
     }
 
     /*---------- Getter/Setters ----------*/

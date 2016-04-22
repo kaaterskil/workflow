@@ -26,6 +26,7 @@ import com.kaaterskil.workflow.engine.interceptor.CommandContext;
 import com.kaaterskil.workflow.engine.persistence.entity.Token;
 import com.kaaterskil.workflow.engine.service.TokenService;
 import com.kaaterskil.workflow.engine.util.ProcessDefinitionUtil;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 public class OutgoingSequenceFlowOperation extends AbstractOperation {
     private static final Logger log = LoggerFactory.getLogger(OutgoingSequenceFlowOperation.class);
@@ -51,7 +52,7 @@ public class OutgoingSequenceFlowOperation extends AbstractOperation {
 
         } else if (currentFlowElement instanceof Activity) {
             final Activity activity = (Activity) currentFlowElement;
-            if (activity != null && !activity.getBoundaryEventRefs().isEmpty()) {
+            if (activity != null && CollectionUtil.isNotEmpty(activity.getBoundaryEventRefs())) {
                 final List<String> eventRefsToKeep = new ArrayList<>();
 
                 for (final String eventRef : activity.getBoundaryEventRefs()) {
@@ -59,9 +60,8 @@ public class OutgoingSequenceFlowOperation extends AbstractOperation {
                             .getProcess(token.getProcessDefinitionId());
                     final BoundaryEvent event = (BoundaryEvent) process.getFlowElement(eventRef,
                             true);
-                    if (event.getEventDefinitions() != null
-                            && !event.getEventDefinitions().isEmpty() && event.getEventDefinitions()
-                                    .get(0) instanceof CancelEventDefinition) {
+                    if (CollectionUtil.isNotEmpty(event.getEventDefinitions()) && event
+                            .getEventDefinitions().get(0) instanceof CancelEventDefinition) {
                         eventRefsToKeep.add(eventRef);
                     }
                 }

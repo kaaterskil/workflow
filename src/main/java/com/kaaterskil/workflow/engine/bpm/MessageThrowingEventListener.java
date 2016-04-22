@@ -6,6 +6,7 @@ import com.kaaterskil.workflow.engine.context.Context;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEvent;
 import com.kaaterskil.workflow.engine.persistence.entity.MessageEventSubscription;
 import com.kaaterskil.workflow.engine.service.EventSubscriptionService;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 public class MessageThrowingEventListener extends AbstractDelegateEventListener {
 
@@ -24,7 +25,7 @@ public class MessageThrowingEventListener extends AbstractDelegateEventListener 
                     .findMessageEventSubscriptionsByProcessInstanceAndEventName(
                             event.getProcessInstanceId(), messageName);
 
-            if (subscriptions != null && !subscriptions.isEmpty()) {
+            if (CollectionUtil.isNotEmpty(subscriptions)) {
                 for (final MessageEventSubscription each : subscriptions) {
                     service.eventReceived(each, null, false);
                 }

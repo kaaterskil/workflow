@@ -3,6 +3,8 @@ package com.kaaterskil.workflow.engine.util.tree;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.kaaterskil.workflow.util.CollectionUtil;
+
 public class TokenTreeIterator implements Iterator<TokenTreeNode> {
 
     private final TokenTreeNode rootNode;
@@ -56,7 +58,7 @@ public class TokenTreeIterator implements Iterator<TokenTreeNode> {
                 flattenedList.add(currentNode);
             }
 
-            if (currentNode.getChildren() != null && !currentNode.getChildren().isEmpty()) {
+            if (CollectionUtil.isNotEmpty(currentNode.getChildren())) {
                 for (final TokenTreeNode childNode : currentNode.getChildren()) {
                     nodes.add(childNode);
                 }

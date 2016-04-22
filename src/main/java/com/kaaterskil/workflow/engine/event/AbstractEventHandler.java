@@ -15,6 +15,7 @@ import com.kaaterskil.workflow.engine.interceptor.CommandContext;
 import com.kaaterskil.workflow.engine.persistence.entity.EventSubscription;
 import com.kaaterskil.workflow.engine.persistence.entity.Token;
 import com.kaaterskil.workflow.engine.util.ProcessDefinitionUtil;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 public abstract class AbstractEventHandler implements EventHandler {
 
@@ -98,7 +99,7 @@ public abstract class AbstractEventHandler implements EventHandler {
 
         final List<Token> tokens = Context.getCommandContext().getTokenService()
                 .findChildTokensByParentTokenId(parentToken.getId());
-        if (tokens != null && !tokens.isEmpty()) {
+        if (CollectionUtil.isNotEmpty(tokens)) {
             for (final Token childToken : tokens) {
                 if (!boundaryEventToken.getId().equals(childToken.getId())
                         && childToken.getCurrentFlowElement() != null

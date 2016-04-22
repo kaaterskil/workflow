@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.kaaterskil.workflow.engine.exception.NullValueException;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 public class WorkflowEventUtil {
 
@@ -56,7 +57,7 @@ public class WorkflowEventUtil {
 
         // Call typed listeners
         final List<WorkflowEventListener> list = typedListeners.get(event.getType());
-        if(list != null && !list.isEmpty()) {
+        if(CollectionUtil.isNotEmpty(list)) {
             for(final WorkflowEventListener listener : list) {
                 dispatchEvent(event, listener);
             }

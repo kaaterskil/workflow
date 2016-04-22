@@ -25,6 +25,7 @@ import com.kaaterskil.workflow.engine.interceptor.CommandContext;
 import com.kaaterskil.workflow.engine.persistence.entity.MessageEntity;
 import com.kaaterskil.workflow.engine.persistence.entity.Token;
 import com.kaaterskil.workflow.engine.util.ProcessDefinitionUtil;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 public class ContinueProcessOperation extends AbstractOperation {
     private static final Logger log = LoggerFactory.getLogger(ContinueProcessOperation.class);
@@ -81,14 +82,14 @@ public class ContinueProcessOperation extends AbstractOperation {
             }
         }
 
-        if (flowNode.getTokenListeners() != null && !flowNode.getTokenListeners().isEmpty()) {
+        if (CollectionUtil.isNotEmpty(flowNode.getTokenListeners())) {
             executeTokenListeners(flowNode, TokenListener.EVENT_START);
         }
 
         if (!inCompensation) {
             final List<BoundaryEvent> boundaryEvents = findBoundaryEventsForFlowNode(
                     token.getProcessDefinitionId(), flowNode);
-            if (boundaryEvents != null && !boundaryEvents.isEmpty()) {
+            if (CollectionUtil.isNotEmpty(boundaryEvents)) {
                 executeBoundaryEvents(boundaryEvents, token);
             }
         }
@@ -96,8 +97,8 @@ public class ContinueProcessOperation extends AbstractOperation {
         final BehaviorHelper behaviorHelper = Context.getProcessEngineService().getBehaviorHelper();
         final ActivityBehavior behavior = behaviorHelper.getBehavior(flowNode);
         if (behavior != null) {
-            log.debug("executing activityBehavior {} on activity {} with token {}",
-                    behavior.getClass(), flowNode.getId(), token.getId());
+            log.debug("Executing activityBehavior {} on activity {} with token {}",
+                    behavior.getClass().getSimpleName(), flowNode.getId(), token.getId());
 
             Context.getProcessEngineService().getEventDispatcher()
                     .dispatchEvent(WorkflowEventFactory.createActivityEvent(
@@ -135,7 +136,7 @@ public class ContinueProcessOperation extends AbstractOperation {
 
     private void executeBoundaryEvents(List<BoundaryEvent> boundaryEvents, Token token) {
         for (final BoundaryEvent event : boundaryEvents) {
-            if (event.getEventDefinitions() == null || event.getEventDefinitions().isEmpty()) {
+            if (CollectionUtil.isEmpty(event.getEventDefinitions())) {
                 continue;
             }
 
@@ -161,8 +162,7 @@ public class ContinueProcessOperation extends AbstractOperation {
     }
 
     private void continueThroughSequenceFlow(SequenceFlow sequenceFlow) {
-        if (sequenceFlow.getTokenListeners() != null
-                && !sequenceFlow.getTokenListeners().isEmpty()) {
+        if (CollectionUtil.isNotEmpty(sequenceFlow.getTokenListeners())) {
             executeTokenListeners(sequenceFlow, TokenListener.EVENT_TRANSITION);
         }
 

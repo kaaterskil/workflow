@@ -53,8 +53,13 @@ public class Workflow {
         addOperation(new ContinueProcessOperation(commandContext, token, false, true), token);
     }
 
+    public void addOutgoingSequenceFlow(Token token) {
+        addOperation(new OutgoingSequenceFlowOperation(commandContext, token, true), token);
+    }
+
     public void addOutgoingSequenceFlow(Token token, boolean checkConditions) {
-        addOperation(new OutgoingSequenceFlowOperation(commandContext, token, checkConditions), token);
+        addOperation(new OutgoingSequenceFlowOperation(commandContext, token, checkConditions),
+                token);
     }
 
     public void addEndTokenOperation(Token token) {

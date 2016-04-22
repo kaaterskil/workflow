@@ -49,8 +49,10 @@ public abstract class FlowNode extends FlowElement {
     @Override
     public String toString() {
         return String.format(
-                "FlowNode [incoming=%s, outgoing=%s, name=%s, categoryValueRef=%s, id=%s, documentation=%s, extensionElements=%s]",
-                incoming, outgoing, name, categoryValueRef, id, documentation, extensionElements);
+                "FlowNode [incoming=%s, outgoing=%s, isAsynchronous=%s, behavior=%s, name=%s, categoryValueRef=%s, tokenListeners=%s, subProcess=%s, id=%s, documentation=%s, extensionElements=%s, extensionAttributes=%s]",
+                incoming, outgoing, isAsynchronous, behavior, name, categoryValueRef,
+                tokenListeners, subProcess, id, documentation, extensionElements,
+                extensionAttributes);
     }
 
     /*---------- Getter/Setters ----------*/

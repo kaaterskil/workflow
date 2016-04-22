@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.kaaterskil.workflow.bpm.foundation.BaseElement;
 import com.kaaterskil.workflow.engine.parser.handler.ParseHandler;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 public class BpmParseHelper {
 
@@ -17,7 +18,7 @@ public class BpmParseHelper {
     }
 
     public void addHandlers(List<ParseHandler> handlers) {
-        if (handlers != null && !handlers.isEmpty()) {
+        if (CollectionUtil.isNotEmpty(handlers)) {
             for (final ParseHandler handler : handlers) {
                 addHandler(handler);
             }

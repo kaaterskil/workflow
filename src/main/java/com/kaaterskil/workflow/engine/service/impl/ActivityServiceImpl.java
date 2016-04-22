@@ -15,6 +15,7 @@ import com.kaaterskil.workflow.engine.persistence.entity.ActivityEntity;
 import com.kaaterskil.workflow.engine.persistence.entity.Token;
 import com.kaaterskil.workflow.engine.persistence.repository.ActivityRepository;
 import com.kaaterskil.workflow.engine.service.ActivityService;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 @Component
 public class ActivityServiceImpl implements ActivityService {
@@ -41,13 +42,13 @@ public class ActivityServiceImpl implements ActivityService {
         final String activityId = token.getCurrentActivity();
         List<ActivityEntity> instances = repository.findUnfinishedActivities(tokenId, activityId);
 
-        if (instances != null && !instances.isEmpty()) {
+        if (CollectionUtil.isNotEmpty(instances)) {
             return instances.get(0);
         }
 
         if (token.getParent() != null) {
             instances = repository.findUnfinishedActivities(token.getParent().getId(), activityId);
-            if (instances != null & !instances.isEmpty()) {
+            if (CollectionUtil.isNotEmpty(instances)) {
                 return instances.get(0);
             }
         }

@@ -23,6 +23,7 @@ import com.kaaterskil.workflow.engine.service.TokenService;
 import com.kaaterskil.workflow.engine.util.ApplicationContextUtil;
 import com.kaaterskil.workflow.engine.util.ProcessDefinitionUtil;
 import com.kaaterskil.workflow.engine.util.ScopeUtil;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 public class EndTokenOperation extends AbstractOperation {
     private static final Logger log = LoggerFactory.getLogger(EndTokenOperation.class);
@@ -100,14 +101,12 @@ public class EndTokenOperation extends AbstractOperation {
                         for (final FlowElement each : subProcess.getFlowElements()) {
                             if (each instanceof Activity) {
                                 final Activity subActivity = (Activity) each;
-                                if (subActivity.getBoundaryEventRefs() != null
-                                        && !subActivity.getBoundaryEventRefs().isEmpty()) {
+                                if (CollectionUtil.isNotEmpty(subActivity.getBoundaryEventRefs())) {
                                     for (final String boundaryEventRef : subActivity
                                             .getBoundaryEventRefs()) {
                                         final BoundaryEvent event = (BoundaryEvent) process
                                                 .getFlowElement(boundaryEventRef, true);
-                                        if (event.getEventDefinitions() != null
-                                                && !event.getEventDefinitions().isEmpty()
+                                        if (CollectionUtil.isNotEmpty(event.getEventDefinitions())
                                                 && (event.getEventDefinitions().get(
                                                         0) instanceof CompensateEventDefinition)) {
                                             hasCompensation = true;
@@ -123,13 +122,13 @@ public class EndTokenOperation extends AbstractOperation {
                                 parentToken.getParent());
                     }
                 } else {
-                    if(tokenEntity.getCurrentFlowElement() instanceof Activity) {
+                    if (tokenEntity.getCurrentFlowElement() instanceof Activity) {
                         final Activity activity = (Activity) tokenEntity.getCurrentFlowElement();
-                        if(activity.isForCompensation()) {
+                        if (activity.isForCompensation()) {
                             return;
                         }
                     }
-                    if(!(parentToken.getCurrentFlowElement() instanceof SubProcess)) {
+                    if (!(parentToken.getCurrentFlowElement() instanceof SubProcess)) {
                         parentToken.setCurrentFlowElement(tokenEntity.getCurrentFlowElement());
                     }
                 }
@@ -156,7 +155,7 @@ public class EndTokenOperation extends AbstractOperation {
             }
 
             final Process process = getProcess(token.getProcessDefinitionId());
-            if (process.getTokenListeners() != null && !process.getTokenListeners().isEmpty()) {
+            if (CollectionUtil.isNotEmpty(process.getTokenListeners())) {
                 executeTokenListeners(process, token, TokenListener.EVENT_END);
             }
         }
@@ -185,7 +184,7 @@ public class EndTokenOperation extends AbstractOperation {
         final List<Token> childTokens = tokenService.findChildTokensByParentTokenId(tokenId);
 
         final List<Token> result = new ArrayList<>();
-        if (childTokens != null && !childTokens.isEmpty()) {
+        if (CollectionUtil.isNotEmpty(childTokens)) {
             for (final Token each : childTokens) {
                 if (!(each.getCurrentFlowElement() instanceof BoundaryEvent)) {
                     result.add(each);
@@ -213,7 +212,7 @@ public class EndTokenOperation extends AbstractOperation {
 
         boolean isAllEventScope = true;
         final List<Token> tokens = tokenService.findChildTokensByParentTokenId(parentToken.getId());
-        if (tokens != null && !tokens.isEmpty()) {
+        if (CollectionUtil.isNotEmpty(tokens)) {
             for (final Token each : tokens) {
                 if (each.isEventScope()) {
                     tokenService.deleteTokenAndRelatedData(each, null);

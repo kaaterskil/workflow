@@ -6,6 +6,7 @@ import java.util.List;
 import com.kaaterskil.workflow.bpm.FieldExtension;
 import com.kaaterskil.workflow.bpm.foundation.BaseElement;
 import com.kaaterskil.workflow.engine.parser.FieldDeclaration;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 public abstract class AbstractBehaviorFactory {
 
@@ -23,7 +24,7 @@ public abstract class AbstractBehaviorFactory {
     protected List<FieldExtension> extractFieldExtensions(BaseElement element) {
         final List<FieldExtension> fields = new ArrayList<>();
 
-        if (element.getExtensionElements() != null && !element.getExtensionElements().isEmpty()) {
+        if (CollectionUtil.isNotEmpty(element.getExtensionElements())) {
             for (final Object each : element.getExtensionElements()) {
                 if (each instanceof FieldExtension) {
                     fields.add((FieldExtension) each);

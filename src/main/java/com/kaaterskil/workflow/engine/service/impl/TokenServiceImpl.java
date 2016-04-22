@@ -26,6 +26,7 @@ import com.kaaterskil.workflow.engine.service.VariableService;
 import com.kaaterskil.workflow.engine.util.tree.TokenTree;
 import com.kaaterskil.workflow.engine.util.tree.TokenTreeNode;
 import com.kaaterskil.workflow.engine.util.tree.TokenTreeUtil;
+import com.kaaterskil.workflow.util.CollectionUtil;
 
 @Component
 public class TokenServiceImpl implements TokenService {
@@ -218,7 +219,7 @@ public class TokenServiceImpl implements TokenService {
         // Delete jobs
         final JobService jobService = Context.getCommandContext().getJobService();
         final List<JobEntity> jobs = jobService.findByTokenId(token.getId());
-        if (jobs != null && !jobs.isEmpty()) {
+        if (CollectionUtil.isNotEmpty(jobs)) {
             for (final JobEntity job : jobs) {
                 token.getJobs().remove(job);
                 jobService.delete(job);

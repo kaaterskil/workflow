@@ -48,17 +48,6 @@ public abstract class ThrowEvent extends Event {
     @XmlElement(name = "inputSet", type = InputSet.class)
     protected InputSet inputSet;
 
-    /*---------- Methods ----------*/
-
-    @Override
-    public String toString() {
-        return String.format(
-                "ThrowEvent [eventDefinitionRefs=%s, eventDefinitions=%s, dataInputAssociations=%s, dataInputs=%s, inputSet=%s, properties=%s, incoming=%s, outgoing=%s, name=%s, categoryValueRef=%s, id=%s, documentation=%s, extensionElements=%s]",
-                eventDefinitionRefs, eventDefinitions, dataInputAssociations, dataInputs, inputSet,
-                properties, incoming, outgoing, name, categoryValueRef, id, documentation,
-                extensionElements);
-    }
-
     /*---------- Getter/Setters ----------*/
 
     public List<String> getEventDefinitionRefs() {
