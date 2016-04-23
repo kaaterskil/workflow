@@ -37,4 +37,8 @@ public interface DelegateToken extends VariableScope {
     void setScope(boolean isScope);
 
     boolean isProcessInstanceType();
+
+    boolean isMultiInstanceRoot();
+
+    void setMultiInstanceRoot(boolean isMultiInstanceRoot);
 }

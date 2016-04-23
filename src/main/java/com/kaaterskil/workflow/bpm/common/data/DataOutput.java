@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.kaaterskil.workflow.bpm.foundation.BaseElement;
 
@@ -27,7 +28,7 @@ public class DataOutput extends BaseElement implements ItemAwareElement {
     @XmlElement
     private List<String> outputSetRefs = new ArrayList<>();
 
-    @XmlElement(name = "dataState", type = DataState.class, required = false)
+    @XmlTransient
     private DataState dataState;
 
     /*---------- Methods ----------*/

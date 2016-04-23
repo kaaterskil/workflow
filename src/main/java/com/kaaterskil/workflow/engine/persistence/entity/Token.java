@@ -100,6 +100,9 @@ public class Token implements ProcessInstance, DelegateToken {
     private boolean isEventScope;
 
     @Transient
+    private boolean isMultiInstanceRoot;
+
+    @Transient
     private String eventName;
 
     @Transient
@@ -412,6 +415,16 @@ public class Token implements ProcessInstance, DelegateToken {
 
     public void setEventScope(boolean isEventScope) {
         this.isEventScope = isEventScope;
+    }
+
+    @Override
+    public boolean isMultiInstanceRoot() {
+        return isMultiInstanceRoot;
+    }
+
+    @Override
+    public void setMultiInstanceRoot(boolean isMultiInstanceRoot) {
+        this.isMultiInstanceRoot = isMultiInstanceRoot;
     }
 
     public String getEventName() {

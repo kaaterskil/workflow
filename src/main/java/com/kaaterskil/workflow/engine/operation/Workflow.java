@@ -53,6 +53,10 @@ public class Workflow {
         addOperation(new ContinueProcessOperation(commandContext, token, false, true), token);
     }
 
+    public void addContinueMultiInstanceOperation(Token token) {
+        addOperation(new ContinueMultiInstanceOperation(commandContext, token), token);
+    }
+
     public void addOutgoingSequenceFlow(Token token) {
         addOperation(new OutgoingSequenceFlowOperation(commandContext, token, true), token);
     }
