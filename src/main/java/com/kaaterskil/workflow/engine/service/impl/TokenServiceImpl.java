@@ -55,6 +55,11 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
+    public List<Token> findInactiveTokensByActivityId(String activityId) {
+        return repository.findInactiveTokensByActivityId(activityId);
+    }
+
+    @Override
     public List<Token> findInactiveTokensByActivityIdAndProcessInstanceId(String activityId,
             Long processInstanceId) {
         return repository.findInactiveTokensByActivityIdAndProcessInstanceId(activityId,

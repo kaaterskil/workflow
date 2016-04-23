@@ -23,6 +23,9 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     @Query(value = "select e from Token e where e.parent.id = :parentTokenId")
     List<Token> findByParentId(@Param("parentTokenId") Long parentTokenId);
 
+    @Query(value = "select e from Token e where e.currentActivity = :activityId and e.isActive = true")
+    List<Token> findInactiveTokensByActivityId(@Param(":activityId") String activityId);
+
     @Query(value = "select e from Token e where e.currentActivity = :activityId "
             + "and e.processInstanceId = :processInstanceId and e.isActive = :isActive")
     List<Token> findInactiveTokensByActivityIdAndProcessInstanceId(

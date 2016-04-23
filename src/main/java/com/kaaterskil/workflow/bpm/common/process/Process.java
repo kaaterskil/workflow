@@ -125,7 +125,7 @@ public class Process extends CallableElement implements FlowElementsContainer, H
 
     @Override
     public FlowElement getFlowElement(String flowElementId, boolean searchRecursively) {
-        if(searchRecursively) {
+        if (searchRecursively) {
             return getFlowElementRecursively(this, flowElementId);
         }
         return getFlowElementNonRecursively(flowElementId);
@@ -180,6 +180,28 @@ public class Process extends CallableElement implements FlowElementsContainer, H
             }
         }
         return foundFlowElements;
+    }
+
+    public FlowElementsContainer findParent(FlowElement childElement) {
+        return findParent(childElement, this);
+    }
+
+    public FlowElementsContainer findParent(FlowElement childElement,
+            FlowElementsContainer flowElementsContainer) {
+        for (final FlowElement flowElement : flowElementsContainer.getFlowElements()) {
+            if (childElement.getId() != null && childElement.getId().equals(flowElement.getId())) {
+                return flowElementsContainer;
+            }
+
+            if (flowElement instanceof FlowElementsContainer) {
+                final FlowElementsContainer parent = findParent(childElement,
+                        (FlowElementsContainer) flowElement);
+                if (parent != null) {
+                    return parent;
+                }
+            }
+        }
+        return null;
     }
 
     @Override

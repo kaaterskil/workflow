@@ -16,6 +16,8 @@ public interface TokenService {
 
     List<Token> findChildTokensByProcessInstanceId(Long processInstanceId);
 
+    List<Token> findInactiveTokensByActivityId(String activityId);
+
     List<Token> findInactiveTokensByActivityIdAndProcessInstanceId(String currentActivityId,
             Long processInstanceId);
 

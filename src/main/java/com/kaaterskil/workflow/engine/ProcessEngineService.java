@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.kaaterskil.workflow.engine.behavior.BehaviorHelper;
 import com.kaaterskil.workflow.engine.behavior.handler.EndEventBehaviorHandler;
+import com.kaaterskil.workflow.engine.behavior.handler.ExclusiveGatewayBehaviorHandler;
+import com.kaaterskil.workflow.engine.behavior.handler.InclusiveGatewayBehaviorHandler;
 import com.kaaterskil.workflow.engine.behavior.handler.ServiceTaskBehaviorHandler;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventDispatcher;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventDispatcherImpl;
@@ -40,6 +42,8 @@ import com.kaaterskil.workflow.engine.parser.factory.ActivityBehaviorFactory;
 import com.kaaterskil.workflow.engine.parser.factory.ListenerFactory;
 import com.kaaterskil.workflow.engine.parser.factory.ListenerFactoryImpl;
 import com.kaaterskil.workflow.engine.parser.handler.EndEventParseHandler;
+import com.kaaterskil.workflow.engine.parser.handler.ExclusiveGatewayParseHandler;
+import com.kaaterskil.workflow.engine.parser.handler.InclusiveGatewayParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.ParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.ProcessParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.SequenceFlowParseHandler;
@@ -130,7 +134,7 @@ public class ProcessEngineService {
     }
 
     private void initVariableTypeHelper() {
-        if(variableTypeHelper == null) {
+        if (variableTypeHelper == null) {
             variableTypeHelper = new VariableTypeHelper();
 
             variableTypeHelper.addType(new BooleanType());
@@ -207,7 +211,7 @@ public class ProcessEngineService {
     }
 
     private void initActivityBehaviorFactory() {
-        if(activityBehaviorFactory == null) {
+        if (activityBehaviorFactory == null) {
             activityBehaviorFactory = new ActivityBehaviorFactory();
         }
     }
@@ -218,20 +222,24 @@ public class ProcessEngineService {
 
             final List<ParseHandler> defaultHandlers = new ArrayList<>();
             defaultHandlers.add(new ProcessParseHandler());
+            defaultHandlers.add(new EndEventParseHandler());
+            defaultHandlers.add(new ExclusiveGatewayParseHandler());
+            defaultHandlers.add(new InclusiveGatewayParseHandler());
             defaultHandlers.add(new SequenceFlowParseHandler());
             defaultHandlers.add(new StartEventParseHandler());
-            defaultHandlers.add(new EndEventParseHandler());
 
             bpmParseHelper.addHandlers(defaultHandlers);
         }
     }
 
     private void initBehaviorHelper() {
-        if(behaviorHelper == null) {
+        if (behaviorHelper == null) {
             behaviorHelper = new BehaviorHelper();
 
-            behaviorHelper.addHandler(new ServiceTaskBehaviorHandler());
             behaviorHelper.addHandler(new EndEventBehaviorHandler());
+            behaviorHelper.addHandler(new ExclusiveGatewayBehaviorHandler());
+            behaviorHelper.addHandler(new InclusiveGatewayBehaviorHandler());
+            behaviorHelper.addHandler(new ServiceTaskBehaviorHandler());
         }
     }
 

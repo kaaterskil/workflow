@@ -5,9 +5,13 @@ import com.kaaterskil.workflow.bpm.common.activity.ServiceTask;
 import com.kaaterskil.workflow.bpm.common.event.EndEvent;
 import com.kaaterskil.workflow.bpm.common.event.ErrorEventDefinition;
 import com.kaaterskil.workflow.bpm.common.event.StartEvent;
+import com.kaaterskil.workflow.bpm.common.gateway.ExclusiveGateway;
+import com.kaaterskil.workflow.bpm.common.gateway.InclusiveGateway;
 import com.kaaterskil.workflow.engine.behavior.BaseActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.CancelEndEventActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.ErrorEndEventActivityBehavior;
+import com.kaaterskil.workflow.engine.behavior.ExclusiveGatewayActivityBehavior;
+import com.kaaterskil.workflow.engine.behavior.InclusiveGatewayActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.NoneEndEventActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.NoneStartEventActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.ParallelMultiInstanceBehavior;
@@ -32,6 +36,18 @@ public class ActivityBehaviorFactory extends AbstractBehaviorFactory {
     public ClassDelegate createClassDelegateServiceTask(ServiceTask task) {
         return classDelegateFactory.create(task.getImplementation(),
                 createFieldDeclarations(extractFieldExtensions(task)));
+    }
+
+    /*---------- Gateways ----------*/
+
+    public ExclusiveGatewayActivityBehavior createExclusiveGatewayActivityBehavior(
+            ExclusiveGateway exclusiveGateway) {
+        return new ExclusiveGatewayActivityBehavior();
+    }
+
+    public InclusiveGatewayActivityBehavior createInclusiveGatewayActivityBehavior(
+            InclusiveGateway inclusiveGateway) {
+        return new InclusiveGatewayActivityBehavior();
     }
 
     /*---------- Multi-Instance ----------*/
