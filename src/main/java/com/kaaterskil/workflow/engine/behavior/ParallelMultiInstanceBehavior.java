@@ -159,7 +159,7 @@ public class ParallelMultiInstanceBehavior extends MultiInstanceActivityBehavior
             currentToken = parentScope;
         }
 
-        // TODO force update on parent scope (why?)
+        parentScope.forceUpdate();
     }
 
     protected void deleteChildTokens(Token parentToken, boolean deleteToken,

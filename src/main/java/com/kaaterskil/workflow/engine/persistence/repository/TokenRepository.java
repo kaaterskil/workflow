@@ -2,7 +2,10 @@ package com.kaaterskil.workflow.engine.persistence.repository;
 
 import java.util.List;
 
+import javax.persistence.LockModeType;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -30,4 +33,8 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     @Query(value = "select e from Token e where e.rootProcessInstanceId = :rootProcessInstanceId")
     List<Token> findByRootProcessInstanceId(
             @Param("rootProcessInstanceId") Long rootProcessInstanceId);
+
+    @Override
+    @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
+    Token findOne(Long id);
 }

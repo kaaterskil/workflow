@@ -16,6 +16,7 @@ public abstract class GatewayActivityBehavior extends FlowNodeActivityBehavior {
             }
             currentToken = parentScopeToken;
         }
-        // TODO Set forcedUpdate property on parent (why?)
+
+        parentScopeToken.forceUpdate();
     }
 }

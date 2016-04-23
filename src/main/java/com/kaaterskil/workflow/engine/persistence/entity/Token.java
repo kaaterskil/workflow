@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 
 import com.kaaterskil.workflow.bpm.common.FlowElement;
 import com.kaaterskil.workflow.bpm.common.process.Process;
@@ -71,9 +72,19 @@ public class Token implements ProcessInstance, DelegateToken {
     @Column(name = "is_scope")
     private boolean isScope;
 
+    @Column(name = "is_event_scope")
+    private boolean isEventScope;
+
+    @Column(name = "is_multi_instance_root")
+    private boolean isMultiInstanceRoot;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "lock_time")
     private Date lockTime;
+
+    @Version
+    @Column(name = "version", nullable = false)
+    private int version;
 
     @OneToMany(mappedBy = "tokenId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @MapKey(name = "tokenId")
@@ -95,12 +106,6 @@ public class Token implements ProcessInstance, DelegateToken {
 
     @Transient
     private boolean isDeleted;
-
-    @Transient
-    private boolean isEventScope;
-
-    @Transient
-    private boolean isMultiInstanceRoot;
 
     @Transient
     private String eventName;
@@ -282,6 +287,11 @@ public class Token implements ProcessInstance, DelegateToken {
         return parent == null;
     }
 
+    public void forceUpdate() {
+        final Token savedToken = Context.getCommandContext().getTokenService().save(this);
+        version = savedToken.getVersion();
+    }
+
     /*---------- Getter/Setters ----------*/
 
     @Override
@@ -365,12 +375,38 @@ public class Token implements ProcessInstance, DelegateToken {
         this.isScope = isScope;
     }
 
+    public boolean isEventScope() {
+        return isEventScope;
+    }
+
+    public void setEventScope(boolean isEventScope) {
+        this.isEventScope = isEventScope;
+    }
+
+    @Override
+    public boolean isMultiInstanceRoot() {
+        return isMultiInstanceRoot;
+    }
+
+    @Override
+    public void setMultiInstanceRoot(boolean isMultiInstanceRoot) {
+        this.isMultiInstanceRoot = isMultiInstanceRoot;
+    }
+
     public Date getLockTime() {
         return lockTime;
     }
 
     public void setLockTime(Date lockTime) {
         this.lockTime = lockTime;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    protected void setVersion(int version) {
+        this.version = version;
     }
 
     @Override
@@ -407,24 +443,6 @@ public class Token implements ProcessInstance, DelegateToken {
 
     public void setDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
-    }
-
-    public boolean isEventScope() {
-        return isEventScope;
-    }
-
-    public void setEventScope(boolean isEventScope) {
-        this.isEventScope = isEventScope;
-    }
-
-    @Override
-    public boolean isMultiInstanceRoot() {
-        return isMultiInstanceRoot;
-    }
-
-    @Override
-    public void setMultiInstanceRoot(boolean isMultiInstanceRoot) {
-        this.isMultiInstanceRoot = isMultiInstanceRoot;
     }
 
     public String getEventName() {

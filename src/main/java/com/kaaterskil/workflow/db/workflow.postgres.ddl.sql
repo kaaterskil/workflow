@@ -40,7 +40,10 @@ BEGIN
  		name 						varchar(255),
  		is_active 					boolean,
  		is_scope 					boolean,
+ 		is_event_scope              boolean,
+ 		is_multi_instance_root      boolean,
  		lock_time 					timestamp(6) WITHOUT TIME ZONE,
+ 		version                     integer not null default 0,
  		CONSTRAINT wf_run_tokens_pk PRIMARY KEY (token_id)
  	);
  	CREATE INDEX wf_run_tokens_idx1 ON wf_run_tokens (parent_id);
