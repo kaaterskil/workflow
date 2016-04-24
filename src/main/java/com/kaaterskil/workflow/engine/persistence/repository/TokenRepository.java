@@ -1,6 +1,7 @@
 package com.kaaterskil.workflow.engine.persistence.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.LockModeType;
 
@@ -22,6 +23,10 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
 
     @Query(value = "select e from Token e where e.parent.id = :parentTokenId")
     List<Token> findByParentId(@Param("parentTokenId") Long parentTokenId);
+
+    @Query(value = "select e from Token e where e.parent.id = :parentTokenId and e.currentActivity in :activityIds")
+    List<Token> findByParentAndActivityIds(@Param("parentTokenId") Long parentTokenId,
+            @Param("activityIds") Set<String> activityIds);
 
     @Query(value = "select e from Token e where e.currentActivity = :activityId and e.isActive = true")
     List<Token> findInactiveTokensByActivityId(@Param(":activityId") String activityId);

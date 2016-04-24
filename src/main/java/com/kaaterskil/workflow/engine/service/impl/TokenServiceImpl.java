@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,6 +43,11 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public TokenTree findTokenTree(Long processInstanceId) {
         return TokenTreeUtil.buildTree(repository.findByRootProcessInstanceId(processInstanceId));
+    }
+
+    @Override
+    public List<Token> findByParentAndActivityIds(Long parentTokenId, Set<String> activityIds) {
+        return repository.findByParentAndActivityIds(parentTokenId, activityIds);
     }
 
     @Override

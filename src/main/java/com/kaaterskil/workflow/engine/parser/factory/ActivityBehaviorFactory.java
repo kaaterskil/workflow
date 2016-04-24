@@ -3,9 +3,11 @@ package com.kaaterskil.workflow.engine.parser.factory;
 import com.kaaterskil.workflow.bpm.common.activity.Activity;
 import com.kaaterskil.workflow.bpm.common.activity.ServiceTask;
 import com.kaaterskil.workflow.bpm.common.activity.SubProcess;
+import com.kaaterskil.workflow.bpm.common.activity.Task;
 import com.kaaterskil.workflow.bpm.common.activity.Transaction;
 import com.kaaterskil.workflow.bpm.common.event.EndEvent;
 import com.kaaterskil.workflow.bpm.common.event.ErrorEventDefinition;
+import com.kaaterskil.workflow.bpm.common.event.IntermediateCatchEvent;
 import com.kaaterskil.workflow.bpm.common.event.StartEvent;
 import com.kaaterskil.workflow.bpm.common.gateway.EventBasedGateway;
 import com.kaaterskil.workflow.bpm.common.gateway.ExclusiveGateway;
@@ -17,12 +19,14 @@ import com.kaaterskil.workflow.engine.behavior.ErrorEndEventActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.EventBasedGatewayActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.ExclusiveGatewayActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.InclusiveGatewayActivityBehavior;
+import com.kaaterskil.workflow.engine.behavior.IntermediateCatchEventActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.NoneEndEventActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.NoneStartEventActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.ParallelGatewayActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.ParallelMultiInstanceBehavior;
 import com.kaaterskil.workflow.engine.behavior.SequentialMultiInstanceBehavior;
 import com.kaaterskil.workflow.engine.behavior.SubProcessActivityBehavior;
+import com.kaaterskil.workflow.engine.behavior.TaskActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.TerminateEndEventActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.TransactionActivityBehavior;
 import com.kaaterskil.workflow.engine.bpm.ClassDelegate;
@@ -36,9 +40,17 @@ public class ActivityBehaviorFactory extends AbstractBehaviorFactory {
         classDelegateFactory = new ClassDelegateFactory();
     }
 
+    /*---------- Start Event ----------*/
+
     public NoneStartEventActivityBehavior createNoneStartEventActivityBehavior(
             StartEvent startEvent) {
         return new NoneStartEventActivityBehavior();
+    }
+
+    /*---------- Tasks ----------*/
+
+    public TaskActivityBehavior createTaskActivityBehavior(Task task) {
+        return new TaskActivityBehavior();
     }
 
     public ClassDelegate createClassDelegateServiceTask(ServiceTask task) {
@@ -88,6 +100,13 @@ public class ActivityBehaviorFactory extends AbstractBehaviorFactory {
 
     public TransactionActivityBehavior createTransactionActivityBehavior(Transaction transaction) {
         return new TransactionActivityBehavior();
+    }
+
+    /*---------- Intermediate Events ----------*/
+
+    public IntermediateCatchEventActivityBehavior createIntermediateCatchEventActivityBehavior(
+            IntermediateCatchEvent event) {
+        return new IntermediateCatchEventActivityBehavior();
     }
 
     /*---------- End Events ----------*/

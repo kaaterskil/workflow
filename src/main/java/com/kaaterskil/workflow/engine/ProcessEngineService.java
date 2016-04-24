@@ -13,9 +13,11 @@ import com.kaaterskil.workflow.engine.behavior.handler.EndEventBehaviorHandler;
 import com.kaaterskil.workflow.engine.behavior.handler.EventBasedGatewayBehaviorHandler;
 import com.kaaterskil.workflow.engine.behavior.handler.ExclusiveGatewayBehaviorHandler;
 import com.kaaterskil.workflow.engine.behavior.handler.InclusiveGatewayBehaviorHandler;
+import com.kaaterskil.workflow.engine.behavior.handler.IntermediateCatchEventBehaviorHandler;
 import com.kaaterskil.workflow.engine.behavior.handler.ParallelGatewayBehaviorHandler;
 import com.kaaterskil.workflow.engine.behavior.handler.ServiceTaskBehaviorHandler;
 import com.kaaterskil.workflow.engine.behavior.handler.SubProcessBehaviorHandler;
+import com.kaaterskil.workflow.engine.behavior.handler.TaskBehaviorHandler;
 import com.kaaterskil.workflow.engine.behavior.handler.TransactionBehaviorHandler;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventDispatcher;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventDispatcherImpl;
@@ -49,12 +51,14 @@ import com.kaaterskil.workflow.engine.parser.handler.EndEventParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.EventBasedGatewayParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.ExclusiveGatewayParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.InclusiveGatewayParseHandler;
+import com.kaaterskil.workflow.engine.parser.handler.IntermediateCatchEventParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.ParallelGatewayParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.ParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.ProcessParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.SequenceFlowParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.StartEventParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.SubProcessParseHandler;
+import com.kaaterskil.workflow.engine.parser.handler.TaskParseHandler;
 import com.kaaterskil.workflow.engine.parser.handler.TransactionParseHandler;
 import com.kaaterskil.workflow.engine.persistence.entity.EventSubscriptionType;
 import com.kaaterskil.workflow.engine.service.DeploymentService;
@@ -234,10 +238,12 @@ public class ProcessEngineService {
             defaultHandlers.add(new EventBasedGatewayParseHandler());
             defaultHandlers.add(new ExclusiveGatewayParseHandler());
             defaultHandlers.add(new InclusiveGatewayParseHandler());
+            defaultHandlers.add(new IntermediateCatchEventParseHandler());
             defaultHandlers.add(new ParallelGatewayParseHandler());
             defaultHandlers.add(new SequenceFlowParseHandler());
             defaultHandlers.add(new StartEventParseHandler());
             defaultHandlers.add(new SubProcessParseHandler());
+            defaultHandlers.add(new TaskParseHandler());
             defaultHandlers.add(new TransactionParseHandler());
 
             bpmParseHelper.addHandlers(defaultHandlers);
@@ -252,9 +258,11 @@ public class ProcessEngineService {
             behaviorHelper.addHandler(new EventBasedGatewayBehaviorHandler());
             behaviorHelper.addHandler(new ExclusiveGatewayBehaviorHandler());
             behaviorHelper.addHandler(new InclusiveGatewayBehaviorHandler());
+            behaviorHelper.addHandler(new IntermediateCatchEventBehaviorHandler());
             behaviorHelper.addHandler(new ParallelGatewayBehaviorHandler());
             behaviorHelper.addHandler(new ServiceTaskBehaviorHandler());
             behaviorHelper.addHandler(new SubProcessBehaviorHandler());
+            behaviorHelper.addHandler(new TaskBehaviorHandler());
             behaviorHelper.addHandler(new TransactionBehaviorHandler());
         }
     }

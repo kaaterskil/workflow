@@ -1,6 +1,7 @@
 package com.kaaterskil.workflow.engine.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.kaaterskil.workflow.engine.persistence.entity.ProcessDefinitionEntity;
 import com.kaaterskil.workflow.engine.persistence.entity.Token;
@@ -11,6 +12,8 @@ public interface TokenService {
     Token findById(Long tokenId);
 
     TokenTree findTokenTree(Long processInstanceId);
+
+    List<Token> findByParentAndActivityIds(Long parentTokenId, Set<String> activityIds);
 
     List<Token> findChildTokensByParentTokenId(Long parentTokenId);
 
