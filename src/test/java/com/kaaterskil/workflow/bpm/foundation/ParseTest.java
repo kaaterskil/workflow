@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.kaaterskil.workflow.bpm.common.process.Process;
+import com.kaaterskil.workflow.engine.parser.BpmModel;
 import com.kaaterskil.workflow.util.XmlConverter;
 
 public class ParseTest {
@@ -23,7 +23,7 @@ public class ParseTest {
 
     @Test
     public void testParse() throws Exception {
-        final Process process = (Process) converter.read("/test-process.xml");
-        System.out.println(process.toString());
+        final BpmModel model = (BpmModel) converter.read("/test-process.xml");
+        System.out.println(model.toString());
     }
 }

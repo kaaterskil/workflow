@@ -39,7 +39,7 @@ public class IntermediateCatchEventBehaviorHandler
         } else if (eventDefinition instanceof TimerEventDefinition
                 || eventDefinition instanceof SignalEventDefinition
                 || eventDefinition instanceof MessageEventDefinition) {
-            final BehaviorHelper helper = Context.getProcessEngineService().getBehaviorHelper();
+            final BehaviorHelper helper = Context.getProcessEngineService().getBehaviorHelper(null);
             return helper.getBehavior(event);
         }
 

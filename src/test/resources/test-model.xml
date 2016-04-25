@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model>
+	<signal id="alertSignal" name="alert" />
+
 	<process id="helloWorld" processType="PRIVATE" isExecutable="true"
 		name="Hello World">
 		<flowElements>

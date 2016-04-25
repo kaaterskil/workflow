@@ -19,7 +19,7 @@ public class SequenceFlowParseHandler extends AbstractParseHandler<SequenceFlow>
     @Override
     protected void executeParse(BpmParser parser, SequenceFlow sequenceFlow) {
         log.debug("Parsing sequence flow " + sequenceFlow.getId());
-        final Process process = parser.getProcess();
+        final Process process = parser.getCurrentProcess();
 
         sequenceFlow
                 .setSourceFlowElement(process.getFlowElement(sequenceFlow.getSourceRef(), true));

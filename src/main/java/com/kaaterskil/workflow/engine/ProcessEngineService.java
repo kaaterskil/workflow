@@ -1,5 +1,6 @@
 package com.kaaterskil.workflow.engine;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import com.kaaterskil.workflow.engine.behavior.handler.ServiceTaskBehaviorHandle
 import com.kaaterskil.workflow.engine.behavior.handler.SubProcessBehaviorHandler;
 import com.kaaterskil.workflow.engine.behavior.handler.TaskBehaviorHandler;
 import com.kaaterskil.workflow.engine.behavior.handler.TransactionBehaviorHandler;
+import com.kaaterskil.workflow.engine.delegate.DelegateToken;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventDispatcher;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventDispatcherImpl;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventListener;
@@ -361,6 +363,27 @@ public class ProcessEngineService {
         return eventHandlers.get(eventType);
     }
 
+    public BehaviorHelper getBehaviorHelper(DelegateToken token) {
+        final DeploymentService deploymentService = repositoryService.getDeploymentService();
+
+        Serializable key = null;
+        if (token != null) {
+            key = token.getProcessDefinitionId();
+        } else {
+            final Serializable[] keys = deploymentService.getProcessDefinitionCache().keySet()
+                    .toArray(new Serializable[1]);
+            key = keys[0];
+        }
+        final ProcessDefinitionCacheEntry cacheEntry = deploymentService.getProcessDefinitionCache()
+                .get(key);
+
+        final BehaviorHelper helper = behaviorHelper;
+        if (cacheEntry != null) {
+            helper.setBpmModel(cacheEntry.getBpmModel());
+        }
+        return helper;
+    }
+
     /*---------- Getter/Setters ----------*/
 
     public VariableTypeHelper getVariableTypeHelper() {
@@ -443,8 +466,8 @@ public class ProcessEngineService {
         this.bpmParseHelper = bpmParseHelper;
     }
 
-    public BehaviorHelper getBehaviorHelper() {
-        return behaviorHelper;
+    public BehaviorHelper getBehaviorHelper(){
+        return getBehaviorHelper(null);
     }
 
     public void setBehaviorHelper(BehaviorHelper behaviorHelper) {

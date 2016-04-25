@@ -1,5 +1,8 @@
 package com.kaaterskil.workflow.engine.behavior.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.kaaterskil.workflow.bpm.common.FlowNode;
 import com.kaaterskil.workflow.bpm.common.event.CancelEventDefinition;
 import com.kaaterskil.workflow.bpm.common.event.EndEvent;
@@ -11,6 +14,7 @@ import com.kaaterskil.workflow.engine.parser.factory.ActivityBehaviorFactory;
 import com.kaaterskil.workflow.util.CollectionUtil;
 
 public class EndEventBehaviorHandler extends AbstractBehaviorHandler<EndEvent> {
+    private static final Logger log = LoggerFactory.getLogger(EndEventBehaviorHandler.class);
 
     @Override
     public Class<? extends FlowNode> getHandledType() {
@@ -24,11 +28,11 @@ public class EndEventBehaviorHandler extends AbstractBehaviorHandler<EndEvent> {
             final EventDefinition eventDefinition = element.getEventDefinitions().get(0);
 
             if (eventDefinition instanceof ErrorEventDefinition) {
-                final ErrorEventDefinition errorEventDefinition = (ErrorEventDefinition) eventDefinition;
-                // TODO Implement an errorEventDefinition library somewhere so we can fetch the
-                // error code from it.
-
-                return factory.createErrorEndEventActivityBehavior(element, errorEventDefinition);
+                final ErrorEventDefinition errorDefinition = (ErrorEventDefinition) eventDefinition;
+                if (!factory.getBpmModel().containsErrorRef(errorDefinition.getErrorRef())) {
+                    log.warn("An error code is required for an error event");
+                }
+                return factory.createErrorEndEventActivityBehavior(element, errorDefinition);
 
             } else if (eventDefinition instanceof TerminateEventDefinition) {
                 return factory.createTerminateEndEventActivityBehavior(element);

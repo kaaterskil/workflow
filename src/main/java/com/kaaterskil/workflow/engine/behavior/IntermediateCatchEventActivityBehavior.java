@@ -87,7 +87,7 @@ public class IntermediateCatchEventActivityBehavior extends BaseActivityBehavior
                 if (catchEvent.getBehavior()
                         .equals(IntermediateCatchEventActivityBehavior.class.getCanonicalName())) {
                     final BehaviorHelper helper = Context.getProcessEngineService()
-                            .getBehaviorHelper();
+                            .getBehaviorHelper(each);
                     final IntermediateCatchEventActivityBehavior behavior = (IntermediateCatchEventActivityBehavior) helper
                             .getBehavior(catchEvent);
                     behavior.cancelEvent(each);

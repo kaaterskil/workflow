@@ -15,5 +15,4 @@ public abstract class AbstractBehaviorHandler<T extends FlowNode> implements Beh
 
     protected abstract ActivityBehavior instantiateBehavior(ActivityBehaviorFactory factory,
             T element);
-
 }

@@ -26,8 +26,8 @@ public class StartEventParseHandler extends AbstractParseHandler<StartEvent> {
         }
 
         if (element.getSubProcess() == null && (element.getEventDefinitions().isEmpty())
-                || parser.getProcess().getInitialFlowElement() == null) {
-            parser.getProcess().setInitialFlowElement(element);
+                || parser.getCurrentProcess().getInitialFlowElement() == null) {
+            parser.getCurrentProcess().setInitialFlowElement(element);
         }
     }
 

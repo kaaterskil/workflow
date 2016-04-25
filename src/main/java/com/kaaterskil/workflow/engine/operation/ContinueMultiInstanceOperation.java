@@ -45,7 +45,7 @@ public class ContinueMultiInstanceOperation extends AbstractOperation {
         }
 
         final BehaviorHelper behaviorHelper = commandContext.getProcessEngineService()
-                .getBehaviorHelper();
+                .getBehaviorHelper(token);
         final ActivityBehavior behavior = behaviorHelper.getBehavior(flowNode);
         if (behavior != null) {
             log.debug("Executing activityBehavior {} on activity {} with token {}",

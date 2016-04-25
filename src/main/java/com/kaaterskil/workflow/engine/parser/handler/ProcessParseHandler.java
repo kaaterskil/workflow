@@ -38,8 +38,7 @@ public class ProcessParseHandler extends AbstractParseHandler<Process> {
         createEventListeners(process.getExtensionElements(), processDefinition);
 
         parser.processFlowElements(process.getFlowElements());
-
-        parser.setProcessDefinition(processDefinition);
+        parser.getProcessDefinitions().add(processDefinition);
     }
 
     private ProcessDefinitionEntity createProcessDefinition(BpmParser parser, Process process) {

@@ -29,7 +29,7 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
             @Param("activityIds") Set<String> activityIds);
 
     @Query(value = "select e from Token e where e.currentActivity = :activityId and e.isActive = true")
-    List<Token> findInactiveTokensByActivityId(@Param(":activityId") String activityId);
+    List<Token> findInactiveTokensByActivityId(@Param("activityId") String activityId);
 
     @Query(value = "select e from Token e where e.currentActivity = :activityId "
             + "and e.processInstanceId = :processInstanceId and e.isActive = :isActive")

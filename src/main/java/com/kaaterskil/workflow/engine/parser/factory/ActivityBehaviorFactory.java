@@ -31,10 +31,12 @@ import com.kaaterskil.workflow.engine.behavior.TerminateEndEventActivityBehavior
 import com.kaaterskil.workflow.engine.behavior.TransactionActivityBehavior;
 import com.kaaterskil.workflow.engine.bpm.ClassDelegate;
 import com.kaaterskil.workflow.engine.bpm.ClassDelegateFactory;
+import com.kaaterskil.workflow.engine.parser.BpmModel;
 
 public class ActivityBehaviorFactory extends AbstractBehaviorFactory {
 
     private ClassDelegateFactory classDelegateFactory;
+    private BpmModel bpmModel;
 
     public ActivityBehaviorFactory() {
         classDelegateFactory = new ClassDelegateFactory();
@@ -137,5 +139,13 @@ public class ActivityBehaviorFactory extends AbstractBehaviorFactory {
 
     public void setClassDelegateFactory(ClassDelegateFactory classDelegateFactory) {
         this.classDelegateFactory = classDelegateFactory;
+    }
+
+    public BpmModel getBpmModel() {
+        return bpmModel;
+    }
+
+    public void setBpmModel(BpmModel bpmModel) {
+        this.bpmModel = bpmModel;
     }
 }

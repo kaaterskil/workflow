@@ -1,19 +1,30 @@
 package com.kaaterskil.workflow.engine.deploy;
 
 import com.kaaterskil.workflow.bpm.common.process.Process;
+import com.kaaterskil.workflow.engine.parser.BpmModel;
 import com.kaaterskil.workflow.engine.persistence.entity.ProcessDefinitionEntity;
 
 public class ProcessDefinitionCacheEntry {
 
-    protected ProcessDefinitionEntity processDefinitionEntity;
-    protected Process process;
-    protected String xml;
+    private ProcessDefinitionEntity processDefinitionEntity;
+    private BpmModel bpmModel;
+    private Process process;
+    private String xml;
 
     public ProcessDefinitionCacheEntry(ProcessDefinitionEntity processDefinitionEntity,
-            Process process, String xml) {
+            BpmModel bpmModel, Process process, String xml) {
         this.processDefinitionEntity = processDefinitionEntity;
+        this.bpmModel = bpmModel;
         this.process = process;
         this.xml = xml;
+    }
+
+    public BpmModel getBpmModel() {
+        return bpmModel;
+    }
+
+    public void setBpmModel(BpmModel bpmModel) {
+        this.bpmModel = bpmModel;
     }
 
     public ProcessDefinitionEntity getProcessDefinitionEntity() {

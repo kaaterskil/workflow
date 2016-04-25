@@ -25,7 +25,8 @@ public class XmlConverter {
 
     private static Jaxb2Marshaller getMarshaller() {
         final Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-        marshaller.setPackagesToScan("com.kaaterskil.workflow.bpm");
+        marshaller.setPackagesToScan("com.kaaterskil.workflow.bpm",
+                "com.kaaterskil.workflow.engine.parser");
 
         final Map<String, Object> propertyMap = new HashMap<>();
         propertyMap.put("jaxb.formatted.output", true);

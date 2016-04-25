@@ -16,7 +16,7 @@ public class DeploymenFactoryTest extends AbstractUnitTest {
     @Autowired
     private ProcessEngineService processEngineService;
     private DeploymentFactory factory;
-    private final String deploymentName = "/test-process.xml";
+    private final String deploymentName = "/test-model.xml";
 
     @BeforeMethod
     public void setUp() {

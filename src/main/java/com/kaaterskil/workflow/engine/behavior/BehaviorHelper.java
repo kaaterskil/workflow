@@ -9,12 +9,14 @@ import com.kaaterskil.workflow.bpm.common.activity.MultiInstanceLoopCharacterist
 import com.kaaterskil.workflow.engine.behavior.handler.BehaviorHandler;
 import com.kaaterskil.workflow.engine.context.Context;
 import com.kaaterskil.workflow.engine.delegate.ActivityBehavior;
+import com.kaaterskil.workflow.engine.parser.BpmModel;
 import com.kaaterskil.workflow.engine.parser.factory.ActivityBehaviorFactory;
 import com.kaaterskil.workflow.engine.persistence.entity.Token;
 
 public class BehaviorHelper {
 
     private Map<Class<? extends FlowNode>, BehaviorHandler> behaviorHandlers = new HashMap<>();
+    private BpmModel bpmModel;
 
     public BehaviorHandler getHandlerForType(Class<? extends FlowNode> type) {
         return behaviorHandlers.get(type);
@@ -30,6 +32,7 @@ public class BehaviorHelper {
     public ActivityBehavior getBehavior(FlowNode flowNode) {
         final ActivityBehaviorFactory factory = Context.getProcessEngineService()
                 .getActivityBehaviorFactory();
+        factory.setBpmModel(bpmModel);
 
         if (flowNode instanceof Activity) {
             final Activity activity = (Activity) flowNode;
@@ -104,5 +107,13 @@ public class BehaviorHelper {
     public void setBehaviorHandlers(
             Map<Class<? extends FlowNode>, BehaviorHandler> behaviorHandlers) {
         this.behaviorHandlers = behaviorHandlers;
+    }
+
+    public BpmModel getBpmModel() {
+        return bpmModel;
+    }
+
+    public void setBpmModel(BpmModel bpmModel) {
+        this.bpmModel = bpmModel;
     }
 }

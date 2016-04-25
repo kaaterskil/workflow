@@ -22,6 +22,7 @@ import com.kaaterskil.workflow.engine.exception.WorkflowException;
 import com.kaaterskil.workflow.engine.parser.factory.ActivityBehaviorFactory;
 import com.kaaterskil.workflow.engine.persistence.entity.DeploymentEntity;
 import com.kaaterskil.workflow.engine.persistence.entity.ProcessDefinitionEntity;
+import com.kaaterskil.workflow.util.CollectionUtil;
 import com.kaaterskil.workflow.util.FileUtil;
 import com.kaaterskil.workflow.util.ValidationUtils;
 import com.kaaterskil.workflow.util.XmlConverter;
@@ -29,12 +30,14 @@ import com.kaaterskil.workflow.util.XmlConverter;
 public class BpmParser {
     private static final Logger log = LoggerFactory.getLogger(BpmParser.class);
 
+    private String xml;
+    private BpmModel bpmModel;
+    private Process currentProcess;
+    private List<ProcessDefinitionEntity> processDefinitions = new ArrayList<>();
+
     private final XmlConverter xmlConverter;
     private final DeploymentEntity deployment;
     private final String fileName;
-    private String xml;
-    private Process process;
-    private ProcessDefinitionEntity processDefinition;
     private BpmParseHelper parseHelper;
     private ActivityBehaviorFactory activityBehaviorFactory;
 
@@ -53,7 +56,9 @@ public class BpmParser {
             parseProcess();
 
             log.debug("Parsing fileName {} completed", fileName);
-            return new ParsedDeployment(deployment, processDefinition, process, xml);
+
+            return new ParsedDeployment(deployment, processDefinitions.get(0), bpmModel,
+                    currentProcess, xml);
 
         } catch (final XmlMappingException e) {
             log.error("Invalid xm mapping for fileName {}: {}", fileName, e.getMessage());
@@ -75,8 +80,15 @@ public class BpmParser {
 
     private void parseProcess() throws XmlMappingException, IOException {
         log.debug("Parsing deployment file {}", fileName);
-        process = (Process) xmlConverter.read(fileName);
-        parseHelper.parseElement(this, process);
+        // process = (Process) xmlConverter.read(fileName);
+
+        bpmModel = (BpmModel) xmlConverter.read(fileName);
+        if (CollectionUtil.isNotEmpty(bpmModel.getProcesses())) {
+            for (final Process each : bpmModel.getProcesses()) {
+                currentProcess = each;
+                parseHelper.parseElement(this, currentProcess);
+            }
+        }
     }
 
     public void processFlowElements(List<FlowElement> flowElements) {
@@ -88,12 +100,12 @@ public class BpmParser {
             if (flowElement instanceof SequenceFlow) {
                 final SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
 
-                final FlowNode source = (FlowNode) process
+                final FlowNode source = (FlowNode) currentProcess
                         .getFlowElement(sequenceFlow.getSourceRef(), true);
                 if (source != null) {
                     source.getOutgoing().add(sequenceFlow);
                 }
-                final FlowNode target = (FlowNode) process
+                final FlowNode target = (FlowNode) currentProcess
                         .getFlowElement(sequenceFlow.getTargetRef(), true);
                 if (target != null) {
                     target.getIncoming().add(sequenceFlow);
@@ -103,7 +115,7 @@ public class BpmParser {
             } else if (flowElement instanceof BoundaryEvent) {
                 final BoundaryEvent boundaryEvent = (BoundaryEvent) flowElement;
 
-                final FlowElement attachedElement = process
+                final FlowElement attachedElement = currentProcess
                         .getFlowElement(boundaryEvent.getAttachedToRef(), true);
                 if (attachedElement != null) {
                     ((Activity) attachedElement).getBoundaryEventRefs().add(boundaryEvent.getId());
@@ -135,22 +147,41 @@ public class BpmParser {
         }
     }
 
+    public ProcessDefinitionEntity getProcessDefinition(String processDefinitionKey) {
+        if (CollectionUtil.isNotEmpty(processDefinitions)) {
+            for (final ProcessDefinitionEntity processDefinition : processDefinitions) {
+                if (processDefinition.getKey().equals(processDefinitionKey)) {
+                    return processDefinition;
+                }
+            }
+        }
+        return null;
+    }
+
     /*---------- Getter/Setters ----------*/
 
     public String getXml() {
         return xml;
     }
 
-    public Process getProcess() {
-        return process;
+    public BpmModel getBpmModel() {
+        return bpmModel;
     }
 
-    public ProcessDefinitionEntity getProcessDefinition() {
-        return processDefinition;
+    public void setBpmModel(BpmModel bpmModel) {
+        this.bpmModel = bpmModel;
     }
 
-    public void setProcessDefinition(ProcessDefinitionEntity processDefinition) {
-        this.processDefinition = processDefinition;
+    public Process getCurrentProcess() {
+        return currentProcess;
+    }
+
+    public List<ProcessDefinitionEntity> getProcessDefinitions() {
+        return processDefinitions;
+    }
+
+    public void setProcessDefinitions(List<ProcessDefinitionEntity> processDefinitions) {
+        this.processDefinitions = processDefinitions;
     }
 
     public BpmParseHelper getParseHelper() {

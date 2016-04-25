@@ -94,7 +94,8 @@ public class ContinueProcessOperation extends AbstractOperation {
             }
         }
 
-        final BehaviorHelper behaviorHelper = Context.getProcessEngineService().getBehaviorHelper();
+        final BehaviorHelper behaviorHelper = Context.getProcessEngineService()
+                .getBehaviorHelper(token);
         final ActivityBehavior behavior = behaviorHelper.getBehavior(flowNode);
         if (behavior != null) {
             log.debug("Executing activityBehavior {} on activity {} with token {}",
@@ -150,7 +151,7 @@ public class ContinueProcessOperation extends AbstractOperation {
             childToken.setScope(false);
 
             final BehaviorHelper behaviorHelper = Context.getProcessEngineService()
-                    .getBehaviorHelper();
+                    .getBehaviorHelper(token);
             final ActivityBehavior behavior = behaviorHelper.getBehavior(event);
             try {
                 behavior.execute(childToken);

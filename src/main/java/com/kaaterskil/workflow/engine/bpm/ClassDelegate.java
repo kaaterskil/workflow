@@ -124,4 +124,12 @@ public class ClassDelegate extends BaseActivityBehavior
         return ClassDelegateUtil.createDelegate(className, fieldDeclarations);
     }
 
+    @Override
+    public String toString() {
+        return String.format(
+                "ClassDelegate [className=%s, tokenListenerInstance=%s, behaviorInstance=%s, fieldDeclarations=%s, multiInstanceActivityBehavior=%s]",
+                className, tokenListenerInstance, behaviorInstance, fieldDeclarations,
+                multiInstanceActivityBehavior);
+    }
+
 }
