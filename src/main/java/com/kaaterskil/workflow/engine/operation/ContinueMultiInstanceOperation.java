@@ -32,14 +32,13 @@ public class ContinueMultiInstanceOperation extends AbstractOperation {
         }
 
         if (currentFlowElement instanceof FlowNode) {
-            continueThrughFlowNode((FlowNode) currentFlowElement);
+            continueThroughFlowNode((FlowNode) currentFlowElement);
         } else {
             throw new WorkflowException("No valid multi-instance flow node. Halting.");
         }
 
     }
-
-    private void continueThrughFlowNode(FlowNode flowNode) {
+    private void continueThroughFlowNode(FlowNode flowNode) {
         if (CollectionUtil.isNotEmpty(flowNode.getTokenListeners())) {
             executeTokenListeners(flowNode, TokenListener.EVENT_START);
         }

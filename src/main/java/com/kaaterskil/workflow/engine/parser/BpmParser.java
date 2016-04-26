@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.oxm.XmlMappingException;
 
+import com.kaaterskil.workflow.bpm.BpmModel;
 import com.kaaterskil.workflow.bpm.common.FlowElement;
 import com.kaaterskil.workflow.bpm.common.FlowNode;
 import com.kaaterskil.workflow.bpm.common.SequenceFlow;
@@ -81,7 +82,6 @@ public class BpmParser {
 
     private void parseProcess() throws XmlMappingException, IOException {
         log.debug("Parsing deployment file {}", fileName);
-        // process = (Process) xmlConverter.read(fileName);
 
         bpmModel = (BpmModel) xmlConverter.read(fileName);
         if (CollectionUtil.isNotEmpty(bpmModel.getProcesses())) {

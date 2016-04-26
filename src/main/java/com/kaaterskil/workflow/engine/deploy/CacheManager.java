@@ -3,9 +3,9 @@ package com.kaaterskil.workflow.engine.deploy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.kaaterskil.workflow.bpm.BpmModel;
 import com.kaaterskil.workflow.bpm.common.process.Process;
 import com.kaaterskil.workflow.engine.context.Context;
-import com.kaaterskil.workflow.engine.parser.BpmModel;
 import com.kaaterskil.workflow.engine.persistence.entity.ProcessDefinitionEntity;
 
 public class CacheManager {

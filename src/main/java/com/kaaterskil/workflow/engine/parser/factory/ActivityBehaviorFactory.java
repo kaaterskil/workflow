@@ -1,5 +1,6 @@
 package com.kaaterskil.workflow.engine.parser.factory;
 
+import com.kaaterskil.workflow.bpm.BpmModel;
 import com.kaaterskil.workflow.bpm.common.activity.Activity;
 import com.kaaterskil.workflow.bpm.common.activity.ServiceTask;
 import com.kaaterskil.workflow.bpm.common.activity.SubProcess;
@@ -35,7 +36,6 @@ import com.kaaterskil.workflow.engine.behavior.TerminateEndEventActivityBehavior
 import com.kaaterskil.workflow.engine.behavior.TransactionActivityBehavior;
 import com.kaaterskil.workflow.engine.bpm.ClassDelegate;
 import com.kaaterskil.workflow.engine.bpm.ClassDelegateFactory;
-import com.kaaterskil.workflow.engine.parser.BpmModel;
 
 public class ActivityBehaviorFactory extends AbstractBehaviorFactory {
 

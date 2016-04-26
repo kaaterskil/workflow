@@ -1,24 +1,24 @@
 package com.kaaterskil.workflow.bpm.common.event;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.kaaterskil.workflow.bpm.common.Expression;
-
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 public class TimerEventDefinition extends EventDefinition {
 
-    @XmlElement(name = "timeDate", type = Expression.class, required = false)
-    private Expression timeDate;
+    @XmlElement(name = "timeDate", type = Date.class, required = false)
+    private Date timeDate;
 
-    @XmlElement(name = "timeCycle", type = Expression.class, required = false)
-    private Expression timeCycle;
+    @XmlElement(name = "timeCycle", type = Long.class, required = false)
+    private Long timeCycle;
 
-    @XmlElement(name = "timeDuration", type = Expression.class, required = false)
-    private Expression timeDuration;
+    @XmlElement(name = "timeDuration", type = Long.class, required = false)
+    private Long timeDuration;
 
     /*---------- Methods ----------*/
 
@@ -31,27 +31,27 @@ public class TimerEventDefinition extends EventDefinition {
 
     /*---------- Getter/Setters ----------*/
 
-    public Expression getTimeDate() {
+    public Date getTimeDate() {
         return timeDate;
     }
 
-    public void setTimeDate(Expression timeDate) {
+    public void setTimeDate(Date timeDate) {
         this.timeDate = timeDate;
     }
 
-    public Expression getTimeCycle() {
+    public Long getTimeCycle() {
         return timeCycle;
     }
 
-    public void setTimeCycle(Expression timeCycle) {
+    public void setTimeCycle(Long timeCycle) {
         this.timeCycle = timeCycle;
     }
 
-    public Expression getTimeDuration() {
+    public Long getTimeDuration() {
         return timeDuration;
     }
 
-    public void setTimeDuration(Expression timeDuration) {
+    public void setTimeDuration(Long timeDuration) {
         this.timeDuration = timeDuration;
     }
 

@@ -3,13 +3,13 @@ package com.kaaterskil.workflow.engine.behavior;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.kaaterskil.workflow.bpm.BpmModel;
 import com.kaaterskil.workflow.bpm.common.FlowNode;
 import com.kaaterskil.workflow.bpm.common.activity.Activity;
 import com.kaaterskil.workflow.bpm.common.activity.MultiInstanceLoopCharacteristics;
 import com.kaaterskil.workflow.engine.behavior.handler.BehaviorHandler;
 import com.kaaterskil.workflow.engine.context.Context;
 import com.kaaterskil.workflow.engine.delegate.ActivityBehavior;
-import com.kaaterskil.workflow.engine.parser.BpmModel;
 import com.kaaterskil.workflow.engine.parser.factory.ActivityBehaviorFactory;
 import com.kaaterskil.workflow.engine.persistence.entity.Token;
 

@@ -1,4 +1,4 @@
-package com.kaaterskil.workflow.engine.parser;
+package com.kaaterskil.workflow.bpm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.kaaterskil.workflow.bpm.common.Error;
 import com.kaaterskil.workflow.bpm.common.Message;
+import com.kaaterskil.workflow.bpm.common.event.Signal;
 import com.kaaterskil.workflow.bpm.common.process.Process;
 import com.kaaterskil.workflow.util.CollectionUtil;
 
@@ -17,8 +18,8 @@ import com.kaaterskil.workflow.util.CollectionUtil;
 @XmlAccessorType(XmlAccessType.NONE)
 public class BpmModel {
 
-    @XmlElement(name = "signal", type = SignalDefinition.class, required = false)
-    List<SignalDefinition> signals = new ArrayList<>();
+    @XmlElement(name = "signal", type = Signal.class, required = false)
+    List<Signal> signals = new ArrayList<>();
 
     @XmlElement(name = "message", type = Message.class, required = false)
     List<Message> messages = new ArrayList<>();
@@ -31,9 +32,9 @@ public class BpmModel {
 
     /*---------- Methods ----------*/
 
-    public SignalDefinition getSignal(String id) {
+    public Signal getSignal(String id) {
         if (CollectionUtil.isNotEmpty(signals)) {
-            for (final SignalDefinition signal : signals) {
+            for (final Signal signal : signals) {
                 if (signal.getId().equals(id)) {
                     return signal;
                 }
@@ -104,11 +105,11 @@ public class BpmModel {
 
     /*---------- Getter/Setters ----------*/
 
-    public List<SignalDefinition> getSignals() {
+    public List<Signal> getSignals() {
         return signals;
     }
 
-    public void setSignals(List<SignalDefinition> signals) {
+    public void setSignals(List<Signal> signals) {
         this.signals = signals;
     }
 
