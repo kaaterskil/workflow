@@ -31,6 +31,7 @@ import com.kaaterskil.workflow.bpm.common.activity.SubProcess;
 import com.kaaterskil.workflow.bpm.common.activity.Task;
 import com.kaaterskil.workflow.bpm.common.activity.Transaction;
 import com.kaaterskil.workflow.bpm.common.artifact.Artifact;
+import com.kaaterskil.workflow.bpm.common.artifact.Association;
 import com.kaaterskil.workflow.bpm.common.artifact.CategoryValue;
 import com.kaaterskil.workflow.bpm.common.artifact.Group;
 import com.kaaterskil.workflow.bpm.common.artifact.TextAnnotation;
@@ -227,6 +228,29 @@ public class Process extends CallableElement implements FlowElementsContainer, H
         if (artifact != null) {
             artifacts.remove(artifact);
         }
+    }
+
+    public List<Association> findAssociationsWithSourceRef(
+            FlowElementsContainer flowElementsContainer, String sourceRef) {
+        final List<Association> associations = new ArrayList<>();
+
+        for (final Artifact artifact : flowElementsContainer.getArtifacts()) {
+            if (artifact instanceof Association) {
+                final Association association = (Association) artifact;
+                if (association.getSourceRef() != null && association.getTargetRef() != null
+                        && association.getSourceRef().equals(sourceRef)) {
+                    associations.add(association);
+                }
+            }
+        }
+
+        for (final FlowElement flowElement : flowElementsContainer.getFlowElements()) {
+            if (flowElement instanceof FlowElementsContainer) {
+                associations.addAll(findAssociationsWithSourceRef(
+                        (FlowElementsContainer) flowElement, sourceRef));
+            }
+        }
+        return associations;
     }
 
     @Override

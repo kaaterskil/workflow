@@ -5,9 +5,9 @@ import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue(value = "COMPENSATE")
-public class CompensationEventSubscription extends EventSubscription {
+public class CompensateEventSubscription extends EventSubscription {
 
-    public CompensationEventSubscription() {
+    public CompensateEventSubscription() {
         eventType = EventSubscriptionType.COMPENSATE;
     }
 

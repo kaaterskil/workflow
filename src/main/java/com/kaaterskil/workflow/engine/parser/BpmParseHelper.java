@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.kaaterskil.workflow.bpm.common.FlowElement;
 import com.kaaterskil.workflow.bpm.foundation.BaseElement;
 import com.kaaterskil.workflow.engine.parser.handler.ParseHandler;
 import com.kaaterskil.workflow.util.CollectionUtil;
@@ -37,6 +38,10 @@ public class BpmParseHelper {
     }
 
     public void parseElement(BpmParser parser, BaseElement element) {
+        if (element instanceof FlowElement) {
+            parser.setCurrentFlowElement((FlowElement) element);
+        }
+
         final List<ParseHandler> handlers = parseHandlers.get(element.getClass());
         if (handlers != null) {
             for (final ParseHandler handler : handlers) {

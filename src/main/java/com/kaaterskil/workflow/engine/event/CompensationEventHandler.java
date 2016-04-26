@@ -10,7 +10,7 @@ import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventFactory;
 import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventType;
 import com.kaaterskil.workflow.engine.exception.WorkflowException;
 import com.kaaterskil.workflow.engine.interceptor.CommandContext;
-import com.kaaterskil.workflow.engine.persistence.entity.CompensationEventSubscription;
+import com.kaaterskil.workflow.engine.persistence.entity.CompensateEventSubscription;
 import com.kaaterskil.workflow.engine.persistence.entity.EventSubscription;
 import com.kaaterskil.workflow.engine.persistence.entity.EventSubscriptionType;
 import com.kaaterskil.workflow.engine.persistence.entity.Token;
@@ -49,7 +49,7 @@ public class CompensationEventHandler implements EventHandler {
                 true);
         if (flowElement instanceof SubProcess
                 && ((SubProcess) flowElement).isForCompensation() == false) {
-            final List<CompensationEventSubscription> events = commandContext
+            final List<CompensateEventSubscription> events = commandContext
                     .getEventSubscriptionService()
                     .findCompensationEventSubscriptionsByToken(compensatingToken);
             ScopeUtil.throwCompensationEvent(events, compensatingToken, false);

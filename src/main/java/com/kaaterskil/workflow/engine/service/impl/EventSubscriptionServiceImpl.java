@@ -15,7 +15,7 @@ import com.kaaterskil.workflow.engine.delegate.event.WorkflowEventType;
 import com.kaaterskil.workflow.engine.event.EventHandler;
 import com.kaaterskil.workflow.engine.exception.WorkflowException;
 import com.kaaterskil.workflow.engine.executor.JobHandler;
-import com.kaaterskil.workflow.engine.persistence.entity.CompensationEventSubscription;
+import com.kaaterskil.workflow.engine.persistence.entity.CompensateEventSubscription;
 import com.kaaterskil.workflow.engine.persistence.entity.EventSubscription;
 import com.kaaterskil.workflow.engine.persistence.entity.EventSubscriptionType;
 import com.kaaterskil.workflow.engine.persistence.entity.MessageEntity;
@@ -59,7 +59,7 @@ public class EventSubscriptionServiceImpl implements EventSubscriptionService {
     }
 
     private void processSynchronousEvent(EventSubscription eventSubscription, Object payload) {
-        if (eventSubscription instanceof CompensationEventSubscription) {
+        if (eventSubscription instanceof CompensateEventSubscription) {
             delete(eventSubscription);
         }
 
@@ -89,18 +89,18 @@ public class EventSubscriptionServiceImpl implements EventSubscriptionService {
     }
 
     @Override
-    public List<CompensationEventSubscription> findCompensationEventSubscriptionsByToken(
+    public List<CompensateEventSubscription> findCompensationEventSubscriptionsByToken(
             Token token) {
         final Long tokenId = token.getId();
         final EventSubscriptionType eventType = EventSubscriptionType.COMPENSATE;
         final List<EventSubscription> eventSubscriptions = repository
                 .findByTokenIdAndEventType(tokenId, eventType);
 
-        final List<CompensationEventSubscription> result = new ArrayList<>();
+        final List<CompensateEventSubscription> result = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(eventSubscriptions)) {
             for (final EventSubscription each : eventSubscriptions) {
-                if (each instanceof CompensationEventSubscription) {
-                    result.add((CompensationEventSubscription) each);
+                if (each instanceof CompensateEventSubscription) {
+                    result.add((CompensateEventSubscription) each);
                 }
             }
         }
@@ -120,17 +120,17 @@ public class EventSubscriptionServiceImpl implements EventSubscriptionService {
     }
 
     @Override
-    public CompensationEventSubscription createCompensationEventSubscription() {
-        return new CompensationEventSubscription();
+    public CompensateEventSubscription createCompensationEventSubscription() {
+        return new CompensateEventSubscription();
     }
 
     @Override
-    public CompensationEventSubscription insertCompensationEvent(Token token, String activityId) {
-        final CompensationEventSubscription subscription = createCompensationEventSubscription();
+    public CompensateEventSubscription insertCompensationEvent(Token token, String activityId) {
+        final CompensateEventSubscription subscription = createCompensationEventSubscription();
         subscription.setToken(token);
         subscription.setActivityId(activityId);
 
-        final CompensationEventSubscription savedSubscription = (CompensationEventSubscription) save(
+        final CompensateEventSubscription savedSubscription = (CompensateEventSubscription) save(
                 subscription);
         return savedSubscription;
     }

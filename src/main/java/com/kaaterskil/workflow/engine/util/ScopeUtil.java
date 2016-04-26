@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 import com.kaaterskil.workflow.engine.context.Context;
 import com.kaaterskil.workflow.engine.delegate.DelegateToken;
-import com.kaaterskil.workflow.engine.persistence.entity.CompensationEventSubscription;
+import com.kaaterskil.workflow.engine.persistence.entity.CompensateEventSubscription;
 import com.kaaterskil.workflow.engine.persistence.entity.EventSubscription;
 import com.kaaterskil.workflow.engine.persistence.entity.EventSubscriptionType;
 import com.kaaterskil.workflow.engine.persistence.entity.Token;
@@ -19,7 +19,7 @@ import com.kaaterskil.workflow.engine.service.TokenService;
 public class ScopeUtil {
 
     public static void throwCompensationEvent(
-            List<CompensationEventSubscription> eventSubscriptions, DelegateToken token,
+            List<CompensateEventSubscription> eventSubscriptions, DelegateToken token,
             boolean isAsync) {
 
         final TokenService tokenService = Context.getCommandContext().getTokenService();
@@ -28,7 +28,7 @@ public class ScopeUtil {
 
         // Test if the compensating token is already created, or create a new one. In either case,
         // make it a child of the executing token.
-        for (final CompensationEventSubscription subscription : eventSubscriptions) {
+        for (final CompensateEventSubscription subscription : eventSubscriptions) {
             Token compensationToken = null;
             if (subscription.getConfiguration() != null) {
                 final Long tokenId = Long.valueOf(subscription.getConfiguration());
@@ -50,7 +50,7 @@ public class ScopeUtil {
             }
         });
 
-        for (final CompensationEventSubscription each : eventSubscriptions) {
+        for (final CompensateEventSubscription each : eventSubscriptions) {
             eventSubscriptionService.eventReceived(each, null, isAsync);
         }
     }
@@ -62,10 +62,10 @@ public class ScopeUtil {
         final List<EventSubscription> eventSubscriptions = eventSubscriptionService
                 .findByTokenAndEventType(subProcessToken, EventSubscriptionType.COMPENSATE);
 
-        final List<CompensationEventSubscription> subscriptions = new ArrayList<>();
+        final List<CompensateEventSubscription> subscriptions = new ArrayList<>();
         for (final EventSubscription each : eventSubscriptions) {
-            if (each instanceof CompensationEventSubscription) {
-                subscriptions.add((CompensationEventSubscription) each);
+            if (each instanceof CompensateEventSubscription) {
+                subscriptions.add((CompensateEventSubscription) each);
             }
         }
 
@@ -81,17 +81,17 @@ public class ScopeUtil {
                 eventScopeToken.setVariable(variable.getKey(), variable.getValue());
             }
 
-            for (final CompensationEventSubscription each : subscriptions) {
+            for (final CompensateEventSubscription each : subscriptions) {
                 eventSubscriptionService.delete(each);
 
-                final CompensationEventSubscription newSubscription = eventSubscriptionService
+                final CompensateEventSubscription newSubscription = eventSubscriptionService
                         .insertCompensationEvent(eventScopeToken, each.getActivityId());
                 newSubscription.setConfiguration(each.getConfiguration());
                 newSubscription.setCreatedAt(each.getCreatedAt());
                 eventSubscriptionService.save(newSubscription);
             }
 
-            final CompensationEventSubscription subscription = eventSubscriptionService
+            final CompensateEventSubscription subscription = eventSubscriptionService
                     .insertCompensationEvent(parentToken,
                             eventScopeToken.getCurrentFlowElement().getId());
             subscription.setConfiguration(eventScopeToken.getId().toString());

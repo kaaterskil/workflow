@@ -33,6 +33,7 @@ public class BpmParser {
     private String xml;
     private BpmModel bpmModel;
     private Process currentProcess;
+    private FlowElement currentFlowElement;
     private List<ProcessDefinitionEntity> processDefinitions = new ArrayList<>();
 
     private final XmlConverter xmlConverter;
@@ -174,6 +175,14 @@ public class BpmParser {
 
     public Process getCurrentProcess() {
         return currentProcess;
+    }
+
+    public FlowElement getCurrentFlowElement() {
+        return currentFlowElement;
+    }
+
+    public void setCurrentFlowElement(FlowElement currentFlowElement) {
+        this.currentFlowElement = currentFlowElement;
     }
 
     public List<ProcessDefinitionEntity> getProcessDefinitions() {

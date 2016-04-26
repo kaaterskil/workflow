@@ -5,6 +5,8 @@ import com.kaaterskil.workflow.bpm.common.activity.ServiceTask;
 import com.kaaterskil.workflow.bpm.common.activity.SubProcess;
 import com.kaaterskil.workflow.bpm.common.activity.Task;
 import com.kaaterskil.workflow.bpm.common.activity.Transaction;
+import com.kaaterskil.workflow.bpm.common.event.BoundaryEvent;
+import com.kaaterskil.workflow.bpm.common.event.CompensateEventDefinition;
 import com.kaaterskil.workflow.bpm.common.event.EndEvent;
 import com.kaaterskil.workflow.bpm.common.event.ErrorEventDefinition;
 import com.kaaterskil.workflow.bpm.common.event.IntermediateCatchEvent;
@@ -14,6 +16,8 @@ import com.kaaterskil.workflow.bpm.common.gateway.ExclusiveGateway;
 import com.kaaterskil.workflow.bpm.common.gateway.InclusiveGateway;
 import com.kaaterskil.workflow.bpm.common.gateway.ParallelGateway;
 import com.kaaterskil.workflow.engine.behavior.BaseActivityBehavior;
+import com.kaaterskil.workflow.engine.behavior.BoundaryCompensateEventActivityBehavior;
+import com.kaaterskil.workflow.engine.behavior.BoundaryEventActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.CancelEndEventActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.ErrorEndEventActivityBehavior;
 import com.kaaterskil.workflow.engine.behavior.EventBasedGatewayActivityBehavior;
@@ -129,6 +133,20 @@ public class ActivityBehaviorFactory extends AbstractBehaviorFactory {
     public TerminateEndEventActivityBehavior createTerminateEndEventActivityBehavior(
             EndEvent endEvent) {
         return new TerminateEndEventActivityBehavior();
+    }
+
+    /*---------- Boundary Events ----------*/
+
+    public BoundaryEventActivityBehavior createBoundaryEventActivityBehavior(
+            BoundaryEvent boundaryEvent, boolean isInterrupting) {
+        return new BoundaryEventActivityBehavior(isInterrupting);
+    }
+
+    public BoundaryCompensateEventActivityBehavior createBoundaryCompensateEventActivityBehavior(
+            BoundaryEvent boundaryEvent, CompensateEventDefinition compensateEventDefinition,
+            boolean isInterrupting) {
+        return new BoundaryCompensateEventActivityBehavior(isInterrupting,
+                compensateEventDefinition);
     }
 
     /*---------- Getter/Setters ----------*/

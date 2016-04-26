@@ -22,6 +22,8 @@ public class BoundaryEventActivityBehavior extends FlowNodeActivityBehavior {
     public BoundaryEventActivityBehavior() {
     }
 
+    /*---------- Methods ----------*/
+
     @Override
     public void trigger(DelegateToken delegateToken, String signalEvent, Object signalData) {
         final Token token = (Token) delegateToken;
