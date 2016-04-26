@@ -10,7 +10,7 @@
 				<documentation text="And this is another note" />
 				<tokenListener
 					implementation="com.kaaterskil.workflow.engine.delegate.event.MockTokenListener"
-					events="end" />
+					events="start" />
 			</serviceTask>
 			<sequenceFlow id="flow_2" sourceRef="task_1" targetRef="end_1" />
 			<endEvent id="end_1" name="EndProcess" />

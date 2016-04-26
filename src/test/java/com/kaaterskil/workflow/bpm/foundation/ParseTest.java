@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.kaaterskil.workflow.engine.parser.BpmModel;
+import com.kaaterskil.workflow.bpm.BpmModel;
 import com.kaaterskil.workflow.util.XmlConverter;
 
 public class ParseTest {
